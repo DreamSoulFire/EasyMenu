@@ -1,0 +1,95 @@
+title: '&6一个测试用的菜单'
+size: 54
+layouts: |-
+  #########
+  #!@$%^&*#
+  #########
+icons:
+  '#':
+    source: 'self'
+    item:
+      name: '&7测试用'
+      material: 'WHITE_STAINED_GLASS_PANE'
+      lore:
+        - '&7这是一个测试 物品生成与unbreakable 的玻璃板'
+      unbreakable: true
+  '!':
+    source: 'self'
+    item:
+      name: '&a测试用'
+      material: 'APPLE'
+      lore:
+        - '&7这是一个测试 command 方法的苹果'
+    functions:
+      - type: 'command'
+        value: |-
+          [console]: say Just to test
+  '@':
+    source: 'self'
+    item:
+      custom-model-data: 10001
+      name: '&a测试用'
+      material: 'CARROT_ON_A_STICK'
+      lore:
+        - '&7这是一个测试 CustomModelData 的胡萝卜钓竿'
+  '$':
+    source: 'self'
+    item:
+      name: '&a测试用'
+      material: 'DIAMOND_SWORD'
+      lore:
+        - '&7这是一个测试 enchantments 的钻石剑'
+      enchantments:
+        SHARPNESS: 5
+  '%':
+    source: 'self'
+    item:
+      name: '&a测试用'
+      material: 'CLAY_BALL'
+      lore:
+        - '&7这是一个测试 catch 方法的黏土球'
+    functions:
+      - type: 'catch'
+        value: '@'
+      - type: 'command'
+        value: |-
+          [player]: say Catch the @catch
+  '^':
+    source: 'self'
+    item:
+      name: '&a测试用'
+      material: 'DIAMOND'
+      lore:
+        - '&7这是一个测试 js 方法的钻石'
+    functions:
+      type: 'js'
+      value: |-
+        functions test() {
+          println("test")
+        }
+  '&':
+    source: 'self'
+    item:
+      name: '&a测试用'
+      material: 'REDSTONE'
+      lore:
+        - '&7这是一个测试 condition 的红石'
+    functions:
+      - condition: |-
+          functions execute(player) {
+            return (player.hasPermission("em.test"))
+          }
+        type: 'js'
+        value: |-
+          functions test() {
+            println("test")
+          }
+  '*':
+    source: 'self'
+    item:
+      name: '&a测试用'
+      material: 'IRON_SWORD'
+      lore:
+        - '&7这是一个测试 item-flags 的铁剑'
+      item-flags:
+        - 'HIDE_ATTRIBUTES'
