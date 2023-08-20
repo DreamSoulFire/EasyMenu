@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pers.soulflame.easymenu.managers.ItemSource;
-import pers.soulflame.easymenu.utils.ItemUtil;
 import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.List;
@@ -15,8 +14,8 @@ import java.util.Map;
 
 public class BaseSource extends ItemSource {
 
-    public BaseSource() {
-        super("self");
+    public BaseSource(String key) {
+        super(key);
     }
 
     /**
@@ -37,21 +36,19 @@ public class BaseSource extends ItemSource {
         final Material type = Material.matchMaterial(aMaterial);
         if (type == null) throw new NullPointerException("Material must not be null");
         final ItemStack item = new ItemStack(type);
-        if (ItemUtil.itemAir(item)) throw new NullPointerException("Item must not be null");
+        if (Material.AIR.equals(item.getType()) || item.getAmount() <= 0)
+            throw new NullPointerException("Item must not be null");
         final ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new NullPointerException("Item's meta must not be null");
         final Object name = map.get("name");
-        if (name != null) {
+        if (name != null)
             meta.setDisplayName(TextUtil.color(name.toString()));
-        }
         final Object lore = map.get("lore");
-        if (lore != null) {
+        if (lore != null)
             meta.setLore(TextUtil.color((List<String>) lore));
-        }
         final Object customModelData = map.get("custom-model-data");
-        if (customModelData != null) {
+        if (customModelData != null)
             meta.setCustomModelData((Integer) customModelData);
-        }
         final Object enchantments = map.get("enchantments");
         if (enchantments != null) {
             final Map<String, Integer> enchants = (Map<String, Integer>) enchantments;
@@ -68,9 +65,8 @@ public class BaseSource extends ItemSource {
             for (final String flag : flags) meta.addItemFlags(ItemFlag.valueOf(flag.toUpperCase()));
         }
         final Object unbreakable = map.get("unbreakable");
-        if (unbreakable != null) {
+        if (unbreakable != null)
             meta.setUnbreakable((Boolean) unbreakable);
-        }
         item.setItemMeta(meta);
         return item;
     }

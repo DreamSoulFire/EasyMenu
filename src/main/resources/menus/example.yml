@@ -55,10 +55,10 @@ icons:
         - '&7这是一个测试 catch 方法的黏土球'
     functions:
       - type: 'catch'
-        value: '@'
+        value: '&7[&fExample&7] &6请在聊天框输入XXX'
       - type: 'command'
         value: |-
-          [player]: say Catch the @catch
+          [player]: say Catch the $catch
   '^':
     source: 'self'
     item:

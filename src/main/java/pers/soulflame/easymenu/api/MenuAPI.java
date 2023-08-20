@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import pers.soulflame.easymenu.managers.Menu;
+import pers.soulflame.easymenu.managers.MenuIcon;
 import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.ArrayList;
@@ -17,7 +18,9 @@ public final class MenuAPI {
 
     }
 
-    public record Result(String str, Integer slot) {}
+    public record Result(String str, Integer slot) {
+
+    }
 
     /**
      * <p>从菜单yaml文件中加载菜单实例</p>
@@ -31,7 +34,7 @@ public final class MenuAPI {
         final String layouts = yaml.getString("layouts", "").replace("\n", "");
         final ConfigurationSection icons = yaml.getConfigurationSection("icons");
         if (icons == null) throw new NullPointerException("Icons must not be null");
-        final Map<String, Menu.MenuIcon> iconMap = new HashMap<>();
+        final Map<String, MenuIcon> iconMap = new HashMap<>();
         for (final String key : icons.getKeys(false)) {
             final ConfigurationSection section = icons.getConfigurationSection(key);
             if (section == null) throw new NullPointerException("Icons must not be null");
@@ -55,7 +58,7 @@ public final class MenuAPI {
             }
             itemMap.put("enchantments", enchMap);
             itemMap.put("item-flags", itemSec.getStringList("item-flags"));
-            iconMap.put(key, new Menu.MenuIcon(source, itemMap, functions));
+            iconMap.put(key, new MenuIcon(source, itemMap, functions));
         }
         return new Menu(TextUtil.color(title), size, layouts, iconMap);
     }
@@ -88,7 +91,7 @@ public final class MenuAPI {
      * @return ?
      * @param <T> ?
      */
-    public static <T> Map<Integer, T> parse(String layouts, Map<String, Menu.MenuIcon> icons, Map<String, T> tempMap) {
+    public static <T> Map<Integer, T> parse(String layouts, Map<String, MenuIcon> icons, Map<String, T> tempMap) {
         final Map<Integer, T> map = new HashMap<>();
         final List<Result> layout = parseLayout(layouts);
         for (final String str : icons.keySet())
@@ -106,7 +109,7 @@ public final class MenuAPI {
      * @param icons 图标map
      * @return 数字和物品堆的map
      */
-    public static Map<Integer, ItemStack> parseToInv(String layouts, Map<String, Menu.MenuIcon> icons) {
+    public static Map<Integer, ItemStack> parseToInv(String layouts, Map<String, MenuIcon> icons) {
         return parse(layouts, icons, parseIconsItem(icons));
     }
 
@@ -118,7 +121,7 @@ public final class MenuAPI {
      * @param icons 图标map
      * @return 数字与MenuIcon的map
      */
-    public static Map<Integer, Menu.MenuIcon> parseIconsChar(String layouts, Map<String, Menu.MenuIcon> icons) {
+    public static Map<Integer, MenuIcon> parseIconsChar(String layouts, Map<String, MenuIcon> icons) {
         return parse(layouts, icons, icons);
     }
 
@@ -128,11 +131,11 @@ public final class MenuAPI {
      * @param icons 图标map
      * @return 对应字符和物品堆的map
      */
-    public static Map<String, ItemStack> parseIconsItem(Map<String, Menu.MenuIcon> icons) {
+    public static Map<String, ItemStack> parseIconsItem(Map<String, MenuIcon> icons) {
         final Map<String, ItemStack> itemMap = new HashMap<>();
-        for (final Map.Entry<String, Menu.MenuIcon> entry : icons.entrySet()) {
+        for (final Map.Entry<String, MenuIcon> entry : icons.entrySet()) {
             final String key = entry.getKey();
-            final Menu.MenuIcon icon = entry.getValue();
+            final MenuIcon icon = entry.getValue();
             itemMap.put(key, icon.parseItem(icon.source()));
         }
         return itemMap;

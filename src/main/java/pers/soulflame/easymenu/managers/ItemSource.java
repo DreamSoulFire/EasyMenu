@@ -1,6 +1,7 @@
 package pers.soulflame.easymenu.managers;
 
 import org.bukkit.inventory.ItemStack;
+import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +36,10 @@ public abstract class ItemSource {
      *
      * @param source 子类
      */
-    public static void addItemSource(ItemSource source) {
-        if (getSources().containsValue(source)) return;
-        getSources().put(source.getKey(), source);
+    public static void addSource(ItemSource source) {
+        Map<String, ItemSource> itemSources = getSources();
+        itemSources.put(source.getKey(), source);
+        TextUtil.sendMessage("&a新的物品源 &e" + source.getKey() + " &a已添加, 当前有 &c" + itemSources.size() + " &a种物品源");
     }
 
     /**

@@ -1,5 +1,6 @@
 package pers.soulflame.easymenu.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -15,6 +16,10 @@ public final class TextUtil {
 
     private TextUtil() {
 
+    }
+
+    public static void sendMessage(String message) {
+        Bukkit.getConsoleSender().sendMessage(color("&7[&aEasy&6Menu&7] " + message));
     }
 
     /**

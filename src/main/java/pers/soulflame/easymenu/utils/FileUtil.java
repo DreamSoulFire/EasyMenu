@@ -17,9 +17,11 @@ import java.util.Map;
  */
 public final class FileUtil {
 
-    public record Result(File file, YamlConfiguration yamlConfiguration) {}
-
     private FileUtil() {
+
+    }
+
+    public record Result(File file, YamlConfiguration yamlConfiguration) {
 
     }
 
@@ -63,6 +65,7 @@ public final class FileUtil {
         FileUtil.createFile(folder, "config.yml");
         final YamlConfiguration config = getFileMap().get("config.yml").yamlConfiguration();
 
+        TextUtil.sendMessage("&a开始加载语言文件夹...");
         String lang = config.getString("language", "zh_cn") + ".yml";
         final Collection<File> languageFiles = getFiles(new File(folder, "languages"), true);
         String langName = "languages/zh_cn.yml";
@@ -74,8 +77,10 @@ public final class FileUtil {
             if (!file.getName().equals(lang)) continue;
             language = YamlConfiguration.loadConfiguration(file);
         }
+        TextUtil.sendMessage("&a语言文件夹加载完成, 共加载了 &e" + languageFiles.size() + " 个语言文件, 当前语言 &d" + lang);
         TextUtil.prefix = language.getString("prefix", "&7[&aEasy&6Menu&7] ");
 
+        TextUtil.sendMessage("&a开始加载菜单文件夹...");
         final Collection<File> menuFiles = FileUtil.getFiles(new File(folder, "menus"), true);
         String menuName = "menus/example.yml";
         if (menuFiles.isEmpty()) {
@@ -86,6 +91,7 @@ public final class FileUtil {
             final Menu menu = MenuAPI.loadMenu(YamlConfiguration.loadConfiguration(file));
             getMenuMap().put(file.getName(), menu);
         }
+        TextUtil.sendMessage("&a菜单文件夹加载完成, 共加载了 &e" + menuFiles.size() + " 个菜单");
     }
 
     /**
@@ -97,8 +103,13 @@ public final class FileUtil {
     public static void createFile(File folder, String name) {
         final File file = new File(folder, name);
         fileMap.put(name, new Result(file, YamlConfiguration.loadConfiguration(file)));
-        if (file.exists()) return;
+        if (file.exists()) {
+            TextUtil.sendMessage("&a默认配置文件 &b" + name + " &a加载成功");
+            return;
+        }
+        TextUtil.sendMessage("&a默认配置文件 &b" + name + " 不存在, 正在生成...");
         EasyMenu.getInstance().saveResource(name, false);
+        TextUtil.sendMessage("&a默认配置文件 &b" + name + " 已生成");
     }
 
     /**
@@ -109,18 +120,6 @@ public final class FileUtil {
      */
     public static File getFile(String name) {
         return getFileMap().get(name).file();
-    }
-
-    /**
-     * <p>通过bukkit的yaml加载文件</p>
-     *
-     * @param file 文件
-     * @return bukkit的yaml
-     */
-    public static YamlConfiguration loadFile(File file) {
-        final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
-        getFileMap().put(file.getName(), new Result(file, YamlConfiguration.loadConfiguration(file)));
-        return yaml;
     }
 
     /**

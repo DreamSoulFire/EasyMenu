@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class NISource extends ItemSource {
 
-    public NISource() {
-        super("ni");
+    public NISource(String key) {
+        super(key);
     }
 
     /**

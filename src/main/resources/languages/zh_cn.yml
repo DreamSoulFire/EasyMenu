@@ -1,5 +1,13 @@
 prefix: '&7[&aEasy&6Menu&7] '
 command:
+  help:
+    - '&6&m                                    '
+    - '&b/easymenu help &f打开插件帮助'
+    - '&b/easymenu open 玩家 菜单 true/false'
+    - '&f为玩家打开一个菜单界面, 并发送信息[false时不发送]'
+    - '&b/easymenu reload &f重载插件'
+    - '&6&m                                    '
+  reload: '&a配置文件重载完成'
   open-for-other: '&a你为 &b<player> &a打开了一个菜单'
   open-menu: '&a你打开了一个菜单'
   player-offline: '&c玩家不存在或离线'
