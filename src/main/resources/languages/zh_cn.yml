@@ -1,4 +1,25 @@
 prefix: '&7[&aEasy&6Menu&7] '
+plugin:
+  start:
+    - '&a开始加载插件'
+    - '&a插件作者: &b<author>'
+    - '&a插件版本: &5<version>'
+    - '&a开始加载物品源...'
+    - '&a物品源加载完成, 当前有 &c<sources> &a种物品源'
+    - '&a开始加载物品功能...'
+    - '&a物品功能加载完成, 当前有 &c<functions> &a种物品功能'
+    - '&a开始加载语言文件夹...'
+    - '&a语言文件夹加载完成, 共加载了 &e<languages> &a个语言文件, 当前语言 &d<lang>...'
+    - '&a开始加载菜单文件夹...'
+    - '&a菜单文件夹加载完成, 共加载了 &e<menus> 个菜单'
+    - '&a开始注册监听...'
+    - '&a监听器注册完成'
+    - '&a开始注册插件指令...'
+    - '&a插件指令注册成功, 共加载了 &3<commands> &a个子指令'
+    - '&a插件加载完成, 感谢您的支持'
+  close:
+    - '&a插件已关闭, 感谢您的使用'
+  points-not-enough: '&c你的点券不足'
 command:
   help:
     - '&6&m                                    '
@@ -8,6 +29,6 @@ command:
     - '&b/easymenu reload &f重载插件'
     - '&6&m                                    '
   reload: '&a配置文件重载完成'
-  open-for-other: '&a你为 &b<player> &a打开了一个菜单'
+  open-for-other: '&a你为 &b%player_name% &a打开了一个菜单'
   open-menu: '&a你打开了一个菜单'
   player-offline: '&c玩家不存在或离线'

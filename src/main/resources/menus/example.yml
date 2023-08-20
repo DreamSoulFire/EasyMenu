@@ -69,28 +69,18 @@ icons:
     functions:
       - type: 'js'
         value: |-
-          functions test() {
-            println("test")
-          }
+          print("test")
   '&':
     source: 'self'
     item:
       name: '&a测试用'
       material: 'REDSTONE'
       lore:
-        - '&7这是一个测试 condition 的红石'
+        - '&7这是一个测试 condition 的红石[大饼]'
     functions:
-      - condition:
-          type: 'js'
-          value: |-
-            functions execute(player) {
-              return (player.hasPermission("em.test"))
-            }
-        type: 'js'
+      - type: 'js'
         value: |-
-          functions test() {
-            println("test")
-          }
+          print("test")
   '*':
     source: 'self'
     item:

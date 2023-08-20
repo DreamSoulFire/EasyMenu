@@ -27,7 +27,37 @@ public final class FileUtil {
 
     private static final Map<String, Result> fileMap = new HashMap<>();
     private static final Map<String, Menu> menuMap = new HashMap<>();
+    private static Collection<File> langFiles = new ArrayList<>();
+    private static Collection<File> menuFiles = new ArrayList<>();
+    private static String lang;
     private static YamlConfiguration language;
+
+    /**
+     * <p>获取当前配置中选择的语言</p>
+     *
+     * @return 语言字符串
+     */
+    public static String getLang() {
+        return lang;
+    }
+
+    /**
+     * <p>获取所有语言文件</p>
+     *
+     * @return 语言文件集合
+     */
+    public static Collection<File> getLangFiles() {
+        return langFiles;
+    }
+
+    /**
+     * <p>获取所有菜单文件</p>
+     *
+     * @return 菜单文件集合
+     */
+    public static Collection<File> getMenuFiles() {
+        return menuFiles;
+    }
 
     /**
      * <p>获取当前正在使用的语言文件</p>
@@ -65,23 +95,20 @@ public final class FileUtil {
         FileUtil.createFile(folder, "config.yml");
         final YamlConfiguration config = getFileMap().get("config.yml").yamlConfiguration();
 
-        TextUtil.sendMessage("&a开始加载语言文件夹...");
-        String lang = config.getString("language", "zh_cn") + ".yml";
-        final Collection<File> languageFiles = getFiles(new File(folder, "languages"), true);
+        lang = config.getString("language", "zh_cn") + ".yml";
+        langFiles = getFiles(new File(folder, "languages"), true);
         String langName = "languages/zh_cn.yml";
-        if (languageFiles.isEmpty()) {
+        if (langFiles.isEmpty()) {
             FileUtil.createFile(folder, langName);
-            languageFiles.add(getFile(langName));
+            langFiles.add(getFile(langName));
         }
-        for (final File file : languageFiles) {
+        for (final File file : langFiles) {
             if (!file.getName().equals(lang)) continue;
             language = YamlConfiguration.loadConfiguration(file);
         }
-        TextUtil.sendMessage("&a语言文件夹加载完成, 共加载了 &e" + languageFiles.size() + " 个语言文件, 当前语言 &d" + lang);
         TextUtil.prefix = language.getString("prefix", "&7[&aEasy&6Menu&7] ");
 
-        TextUtil.sendMessage("&a开始加载菜单文件夹...");
-        final Collection<File> menuFiles = FileUtil.getFiles(new File(folder, "menus"), true);
+        menuFiles = FileUtil.getFiles(new File(folder, "menus"), true);
         String menuName = "menus/example.yml";
         if (menuFiles.isEmpty()) {
             FileUtil.createFile(folder, menuName);
@@ -91,7 +118,6 @@ public final class FileUtil {
             final Menu menu = MenuAPI.loadMenu(YamlConfiguration.loadConfiguration(file));
             getMenuMap().put(file.getName(), menu);
         }
-        TextUtil.sendMessage("&a菜单文件夹加载完成, 共加载了 &e" + menuFiles.size() + " 个菜单");
     }
 
     /**
@@ -103,13 +129,8 @@ public final class FileUtil {
     public static void createFile(File folder, String name) {
         final File file = new File(folder, name);
         fileMap.put(name, new Result(file, YamlConfiguration.loadConfiguration(file)));
-        if (file.exists()) {
-            TextUtil.sendMessage("&a默认配置文件 &b" + name + " &a加载成功");
-            return;
-        }
-        TextUtil.sendMessage("&a默认配置文件 &b" + name + " 不存在, 正在生成...");
+        if (file.exists()) return;
         EasyMenu.getInstance().saveResource(name, false);
-        TextUtil.sendMessage("&a默认配置文件 &b" + name + " 已生成");
     }
 
     /**
@@ -128,8 +149,12 @@ public final class FileUtil {
      * @param yaml bukkit的yaml
      * @param file 文件
      */
-    public static void saveFile(YamlConfiguration yaml, File file) throws IOException {
-        yaml.save(file);
+    public static void saveFile(YamlConfiguration yaml, File file) {
+        try {
+            yaml.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -137,7 +162,7 @@ public final class FileUtil {
      *
      * @param file 文件
      */
-    public static void saveFile(File file) throws IOException {
+    public static void saveFile(File file) {
         final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
         saveFile(yaml, file);
     }

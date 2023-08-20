@@ -24,10 +24,8 @@ public class NISource extends ItemSource {
         Object value = map.get("value");
         if (value == null) throw new NullPointerException("Value must not be null");
         String id = (String) value;
-        if (!ItemManager.INSTANCE.hasItem(id))
-            throw new NullPointerException("NeigeItems don't have this item " + id);
         ItemGenerator item = ItemManager.INSTANCE.getItem(id);
         if (item == null) throw new NullPointerException("Item must not be null");
-        return item.getStaticItemStack();
+        return item.getItemStack(null, "");
     }
 }

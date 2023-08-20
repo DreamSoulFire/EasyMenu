@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import pers.soulflame.easymenu.commands.MainCommand;
 import pers.soulflame.easymenu.listeners.PlayerCatchListener;
@@ -12,6 +13,8 @@ import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.managers.ItemSource;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
 import pers.soulflame.easymenu.managers.functions.CommandFunction;
+import pers.soulflame.easymenu.managers.functions.JSFunction;
+import pers.soulflame.easymenu.managers.functions.PointsFunction;
 import pers.soulflame.easymenu.managers.sources.BaseSource;
 import pers.soulflame.easymenu.managers.sources.NISource;
 import pers.soulflame.easymenu.utils.FileUtil;
@@ -53,6 +56,11 @@ public final class EasyMenu extends JavaPlugin {
         ItemSource.addSource(source);
     }
 
+    /**
+     * <p>添加物品功能</p>
+     *
+     * @param function 物品功能
+     */
     private void addFunction(ItemFunction function) {
         ItemFunction.addFunction(function);
     }
@@ -64,15 +72,16 @@ public final class EasyMenu extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        TextUtil.sendMessage("&a开始加载插件");
-        TextUtil.sendMessage("&a插件作者: &b" + getDescription().getAuthors());
-        TextUtil.sendMessage("&a插件版本: &5" + getDescription().getVersion());
-
         addSource(new BaseSource("self"));
-        addSource(new NISource("ni"));
+        PluginManager manager = Bukkit.getPluginManager();
+        Plugin neigeItems = manager.getPlugin("NeigeItems");
+        if (neigeItems != null) addSource(new NISource("ni"));
 
         addFunction(new CatchFunction("catch"));
         addFunction(new CommandFunction("command"));
+        addFunction(new JSFunction("js"));
+        Plugin playerPoints = manager.getPlugin("PlayerPoints");
+        if (playerPoints != null) addFunction(new PointsFunction("points"));
 
         try {
             FileUtil.loadAllFiles();
@@ -80,24 +89,20 @@ public final class EasyMenu extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
-        TextUtil.sendMessage("&a开始注册监听...");
         register(new PlayerCatchListener());
         register(new PlayerClickInvListener());
-        TextUtil.sendMessage("&a监听器注册完成");
 
-        TextUtil.sendMessage("&a开始注册插件指令...");
         PluginCommand easymenu = getCommand("easymenu");
         if (easymenu != null) {
             easymenu.setExecutor(new MainCommand());
             easymenu.setTabCompleter(new MainCommand());
         }
-        TextUtil.sendMessage("&a插件指令注册成功, 共加载了 &3" + MainCommand.getCommandMap().size() + " &a个子指令");
 
-        TextUtil.sendMessage("&a插件加载完成, 感谢您的支持");
+        TextUtil.startInfo();
     }
 
     @Override
     public void onDisable() {
-        TextUtil.sendMessage("&a插件已关闭, 感谢您的使用");
+        TextUtil.sendMessage(FileUtil.getLanguage().getStringList("plugin.close"));
     }
 }

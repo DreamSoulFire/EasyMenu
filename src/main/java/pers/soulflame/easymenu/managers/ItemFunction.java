@@ -1,7 +1,6 @@
 package pers.soulflame.easymenu.managers;
 
 import org.bukkit.entity.Player;
-import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +35,6 @@ public abstract class ItemFunction {
     public static void addFunction(ItemFunction function) {
         Map<String, ItemFunction> functions = getFunctions();
         functions.put(function.getKey(), function);
-        TextUtil.sendMessage("&a新的物品功能 &e" + function.getKey() + " &a已添加, 当前有 &c" + functions.size() + " &a种物品功能");
     }
 
     /**
@@ -58,6 +56,6 @@ public abstract class ItemFunction {
         return getFunctions().get(key);
     }
 
-    protected abstract void run(Player player, String string);
+    protected abstract boolean run(Player player, String string);
 
 }

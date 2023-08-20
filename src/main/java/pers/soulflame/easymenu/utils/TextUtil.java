@@ -1,8 +1,16 @@
 package pers.soulflame.easymenu.utils;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
+import pers.soulflame.easymenu.EasyMenu;
+import pers.soulflame.easymenu.commands.MainCommand;
+import pers.soulflame.easymenu.managers.ItemFunction;
+import pers.soulflame.easymenu.managers.ItemSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +26,43 @@ public final class TextUtil {
 
     }
 
+    /**
+     * <p>插件启动信息</p>
+     */
+    public static void startInfo() {
+        List<String> list = FileUtil.getLanguage().getStringList("plugin.start");
+        PluginDescriptionFile description = EasyMenu.getInstance().getDescription();
+        List<String> temp = new ArrayList<>();
+        for (String line : list) {
+            temp.add(line.replace("<author>", description.getAuthors().toString())
+                    .replace("<version>", description.getVersion())
+                    .replace("<languages>", String.valueOf(FileUtil.getLangFiles().size()))
+                    .replace("<lang>", FileUtil.getLang())
+                    .replace("<menus>", String.valueOf(FileUtil.getMenuFiles().size()))
+                    .replace("<sources>", String.valueOf(ItemSource.getSources().size()))
+                    .replace("<functions>", String.valueOf(ItemFunction.getFunctions().size()))
+                    .replace("<commands>", String.valueOf(MainCommand.getCommandMap().size()))
+            );
+        }
+        sendMessage(temp);
+    }
+
+    /**
+     * <p>发送单行插件信息</p>
+     *
+     * @param message 需发送的信息
+     */
     public static void sendMessage(String message) {
-        Bukkit.getConsoleSender().sendMessage(color("&7[&aEasy&6Menu&7] " + message));
+        Bukkit.getConsoleSender().sendMessage(color(prefix + message));
+    }
+
+    /**
+     * <p>发送多行插件信息</p>
+     *
+     * @param messages 需发送的信息
+     */
+    public static void sendMessage(List<String> messages) {
+        for (String message : messages) sendMessage(message);
     }
 
     /**
@@ -30,6 +73,8 @@ public final class TextUtil {
      * @param message 单行信息字符串
      */
     public static void sendMessage(CommandSender sender, String message) {
+        if (sender instanceof Player player)
+            message = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, message);
         sender.sendMessage(color(prefix + message));
     }
 

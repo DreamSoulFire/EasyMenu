@@ -18,10 +18,18 @@ public class CatchFunction extends ItemFunction {
         super(key);
     }
 
+    /**
+     * <p>执行聊天信息捕获操作</p>
+     *
+     * @param player 玩家
+     * @param string 发送的信息
+     * @return 是否执行成功
+     */
     @Override
-    protected void run(Player player, String string) {
+    protected boolean run(Player player, String string) {
         TextUtil.sendMessage(player, string);
         catches.add(player);
         player.closeInventory();
+        return true;
     }
 }

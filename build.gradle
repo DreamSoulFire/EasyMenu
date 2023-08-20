@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'pers.soulflame'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -87,6 +87,6 @@ tasks.javadoc {
     destinationDir(file("./docs"))
 }
 
-//tasks.shadowJar {
-//    destinationDirectory.set file("C:\\Users\\D_SoulFlame\\Desktop\\盘灵服务端\\paper\\plugins")
-//}
+tasks.shadowJar {
+    destinationDirectory.set file("C:\\Users\\D_SoulFlame\\Desktop\\盘灵服务端\\paper\\plugins")
+}
