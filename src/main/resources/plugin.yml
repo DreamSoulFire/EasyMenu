@@ -4,6 +4,7 @@ main: pers.soulflame.easymenu.EasyMenu
 api-version: '1.13'
 softdepend:
   - 'PlaceholderAPI'
+  - 'NeigeItems'
 authors: [ SoulFlame ]
 description: 一款平平无奇的菜单插件
 commands:

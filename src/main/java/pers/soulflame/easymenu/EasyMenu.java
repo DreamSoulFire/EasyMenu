@@ -7,6 +7,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import pers.soulflame.easymenu.commands.MainCommand;
 import pers.soulflame.easymenu.listeners.PlayerClickInvListener;
+import pers.soulflame.easymenu.managers.ItemSource;
+import pers.soulflame.easymenu.managers.sources.BaseSource;
+import pers.soulflame.easymenu.managers.sources.NISource;
 import pers.soulflame.easymenu.utils.FileUtil;
 
 import java.io.IOException;
@@ -27,8 +30,22 @@ public final class EasyMenu extends JavaPlugin {
         return instance;
     }
 
+    /**
+     * <p>注册监听器</p>
+     *
+     * @param listener 监听器
+     */
     private void register(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, this);
+    }
+
+    /**
+     * <p>添加物品源</p>
+     *
+     * @param source 物品源
+     */
+    private void addSource(ItemSource source) {
+        ItemSource.addItemSource(source);
     }
 
     @Override
@@ -38,6 +55,10 @@ public final class EasyMenu extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        addSource(new BaseSource());
+        addSource(new NISource());
+
         try {
             FileUtil.loadAllFiles();
         } catch (IOException e) {

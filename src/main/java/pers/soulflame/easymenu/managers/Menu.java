@@ -1,4 +1,4 @@
-package pers.soulflame.easymenu.menus;
+package pers.soulflame.easymenu.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -6,7 +6,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import pers.soulflame.easymenu.api.ItemAPI;
+import pers.soulflame.easymenu.api.MenuAPI;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +22,7 @@ public class Menu implements InventoryHolder {
     private final Integer size;
     private final String layouts;
     private final Map<String, MenuIcon> icons;
+    private Map<Integer, ItemStack> items;
 
     public Menu(String title, Integer size, String layouts, Map<String, MenuIcon> icons) {
         this.title = title;
@@ -31,16 +32,50 @@ public class Menu implements InventoryHolder {
         create();
     }
 
-    public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> functions) {}
+    public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> functions) {
 
+        public ItemStack parseItem(String key) {
+            ItemSource self = ItemSource.getSource(key);
+            return self.parseItem(item);
+        }
+
+    }
+
+    /**
+     * <p>创建一个菜单界面并添加物品</p>
+     */
     private void create() {
         inventory = Bukkit.createInventory(this, size, title);
-        final Map<Integer, ItemStack> items = ItemAPI.parseInventory(getLayouts(), getIcons());
+        final Map<Integer, ItemStack> items = MenuAPI.parseToInv(getLayouts(), getIcons());
+        setItems(items);
         items.forEach((slot, item) -> getInventory().setItem(slot, item));
     }
 
+    /**
+     * <p>为玩家打开一个菜单界面</p>
+     *
+     * @param player 需打开界面的玩家
+     */
     public void open(Player player) {
         player.openInventory(getInventory());
+    }
+
+    /**
+     * <p>获取界面中的所有槽位id与对应物品堆</p>
+     *
+     * @return 所有槽位id与对应物品堆
+     */
+    public Map<Integer, ItemStack> getItems() {
+        return items;
+    }
+
+    /**
+     * <p>设置界面中的所有槽位id与对应物品堆</p>
+     *
+     * @param items 数字与物品堆的map
+     */
+    public void setItems(Map<Integer, ItemStack> items) {
+        this.items = items;
     }
 
     /**

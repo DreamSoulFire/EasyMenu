@@ -2,8 +2,8 @@ package pers.soulflame.easymenu.utils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import pers.soulflame.easymenu.EasyMenu;
-import pers.soulflame.easymenu.api.ItemAPI;
-import pers.soulflame.easymenu.menus.Menu;
+import pers.soulflame.easymenu.api.MenuAPI;
+import pers.soulflame.easymenu.managers.Menu;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,9 +65,10 @@ public final class FileUtil {
 
         String lang = config.getString("language", "zh_cn") + ".yml";
         final Collection<File> languageFiles = getFiles(new File(folder, "languages"), true);
+        String langName = "languages/zh_cn.yml";
         if (languageFiles.isEmpty()) {
-            FileUtil.createFile(folder, "languages/zh_cn.yml");
-            languageFiles.add(getFile("languages/zh_cn.yml"));
+            FileUtil.createFile(folder, langName);
+            languageFiles.add(getFile(langName));
         }
         for (final File file : languageFiles) {
             if (!file.getName().equals(lang)) continue;
@@ -76,12 +77,13 @@ public final class FileUtil {
         TextUtil.prefix = language.getString("prefix", "&7[&aEasy&6Menu&7] ");
 
         final Collection<File> menuFiles = FileUtil.getFiles(new File(folder, "menus"), true);
+        String menuName = "menus/example.yml";
         if (menuFiles.isEmpty()) {
-            FileUtil.createFile(folder, "menus/example.yml");
-            menuFiles.add(getFile("menus/example.yml"));
+            FileUtil.createFile(folder, menuName);
+            menuFiles.add(getFile(menuName));
         }
         for (final File file : menuFiles) {
-            final Menu menu = ItemAPI.loadMenu(YamlConfiguration.loadConfiguration(file));
+            final Menu menu = MenuAPI.loadMenu(YamlConfiguration.loadConfiguration(file));
             getMenuMap().put(file.getName(), menu);
         }
     }

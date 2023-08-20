@@ -3,9 +3,10 @@ package pers.soulflame.easymenu.commands.subs;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import pers.soulflame.easymenu.commands.BaseCommand;
-import pers.soulflame.easymenu.menus.Menu;
+import pers.soulflame.easymenu.managers.Menu;
 import pers.soulflame.easymenu.utils.FileUtil;
 import pers.soulflame.easymenu.utils.TextUtil;
 
@@ -18,12 +19,19 @@ public class OpenCommand extends BaseCommand {
     @Override
     public void onConsoleCommand(CommandSender sender, String[] args) {
         final Player player = Bukkit.getPlayer(args[0]);
+        ConfigurationSection section = FileUtil.getLanguage().getConfigurationSection("command");
+        if (section == null) throw new NullPointerException("The section 'command' in language file must not be null");
         if (player == null) {
-            TextUtil.sendMessage(sender, "&c玩家不存在或离线");
+            String offline = section.getString("player-offline", "&c玩家不存在或离线");
+            TextUtil.sendMessage(sender, offline);
             return;
         }
-        if ("true".equalsIgnoreCase(args[2]))
-            TextUtil.sendMessage(sender, "&a你打开了一个菜单");
+        if ("true".equalsIgnoreCase(args[2])) {
+            String openOther = section.getString("open-for-other", "&a你为 &b<player> &a打开了一个菜单");
+            TextUtil.sendMessage(sender, openOther.replace("<player>", player.getName()));
+            String openMenu = section.getString("open-menu", "&a你打开了一个菜单");
+            TextUtil.sendMessage(player, openMenu);
+        }
         final Map<String, Menu> menus = FileUtil.getMenuMap();
         final Menu menu = menus.get(args[1]);
         menu.open(player);
@@ -51,9 +59,7 @@ public class OpenCommand extends BaseCommand {
             case 2 -> {
                 final Collection<? extends Player> allPlayer = Bukkit.getOnlinePlayers();
                 final List<String> players = new ArrayList<>(allPlayer.size());
-                for (final Player player : allPlayer) {
-                    players.add(player.getName());
-                }
+                for (final Player player : allPlayer) players.add(player.getName());
                 return players;
             }
             case 3 -> {

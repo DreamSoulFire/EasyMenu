@@ -57,9 +57,7 @@ public final class TextUtil {
      */
     public static List<String> color(List<String> texts) {
         final List<String> temp = new ArrayList<>();
-        for (final String text : texts) {
-            temp.add(color(text));
-        }
+        for (final String text : texts) temp.add(color(text));
         return temp;
     }
 

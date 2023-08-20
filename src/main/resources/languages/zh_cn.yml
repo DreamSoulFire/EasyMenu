@@ -1,1 +1,5 @@
 prefix: '&7[&aEasy&6Menu&7] '
+command:
+  open-for-other: '&a你为 &b<player> &a打开了一个菜单'
+  open-menu: '&a你打开了一个菜单'
+  player-offline: '&c玩家不存在或离线'
