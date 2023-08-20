@@ -5,11 +5,11 @@ layouts: |-
   #!@$%^&*#
   #########
 icons:
-#  适配NeigeItems物品库的写法
-#  'P':
-#    source: 'ni'
-#    item:
-#      value: '测试物品'
+  #  适配NeigeItems物品库的写法
+  #  'P':
+  #    source: 'ni'
+  #    item:
+  #      value: '测试物品'
   '#':
     source: 'self'
     item:
@@ -67,11 +67,11 @@ icons:
       lore:
         - '&7这是一个测试 js 方法的钻石'
     functions:
-      type: 'js'
-      value: |-
-        functions test() {
-          println("test")
-        }
+      - type: 'js'
+        value: |-
+          functions test() {
+            println("test")
+          }
   '&':
     source: 'self'
     item:
@@ -80,10 +80,12 @@ icons:
       lore:
         - '&7这是一个测试 condition 的红石'
     functions:
-      - condition: |-
-          functions execute(player) {
-            return (player.hasPermission("em.test"))
-          }
+      - condition:
+          type: 'js'
+          value: |-
+            functions execute(player) {
+              return (player.hasPermission("em.test"))
+            }
         type: 'js'
         value: |-
           functions test() {
