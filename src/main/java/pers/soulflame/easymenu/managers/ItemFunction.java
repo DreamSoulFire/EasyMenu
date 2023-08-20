@@ -1,9 +1,8 @@
 package pers.soulflame.easymenu.managers;
 
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class ItemFunction {
 
@@ -33,7 +32,7 @@ public abstract class ItemFunction {
      * @param function 子类
      */
     public static void addFunction(ItemFunction function) {
-        Map<String, ItemFunction> functions = getFunctions();
+        final Map<String, ItemFunction> functions = getFunctions();
         functions.put(function.getKey(), function);
     }
 
@@ -56,6 +55,6 @@ public abstract class ItemFunction {
         return getFunctions().get(key);
     }
 
-    protected abstract boolean run(Player player, String string);
+    protected abstract boolean run(UUID uuid, String string);
 
 }

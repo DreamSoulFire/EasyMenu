@@ -10,6 +10,7 @@ import pers.soulflame.easymenu.managers.MenuIcon;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerCatchListener implements Listener {
 
@@ -17,12 +18,13 @@ public class PlayerCatchListener implements Listener {
     public void chat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
-        List<Player> catches = CatchFunction.catches;
-        if (!catches.contains(player)) return;
+        final List<UUID> catches = CatchFunction.catches;
+        UUID uniqueId = player.getUniqueId();
+        if (!catches.contains(uniqueId)) return;
         event.setCancelled(true);
-        catches.remove(player);
-        CatchFunction.tempMap.put(player, message);
-        Bukkit.getScheduler().runTask(EasyMenu.getInstance(), () -> MenuIcon.runAfterCatch(player));
+        catches.remove(uniqueId);
+        CatchFunction.tempMap.put(uniqueId, message);
+        Bukkit.getScheduler().runTask(EasyMenu.getInstance(), () -> MenuIcon.runAfterCatch(uniqueId));
     }
 
 }

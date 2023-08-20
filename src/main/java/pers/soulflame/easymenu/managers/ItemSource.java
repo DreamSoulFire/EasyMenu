@@ -36,7 +36,7 @@ public abstract class ItemSource {
      * @param source 子类
      */
     public static void addSource(ItemSource source) {
-        Map<String, ItemSource> itemSources = getSources();
+        final Map<String, ItemSource> itemSources = getSources();
         itemSources.put(source.getKey(), source);
     }
 

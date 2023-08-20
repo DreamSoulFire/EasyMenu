@@ -86,10 +86,10 @@ public final class MenuAPI {
      * <p>不好说明 反正是为了提高复用性(</p>
      *
      * @param layouts 界面排版字符串
-     * @param icons 图标map
+     * @param icons   图标map
      * @param tempMap ?
+     * @param <T>     ?
      * @return ?
-     * @param <T> ?
      */
     public static <T> Map<Integer, T> parse(String layouts, Map<String, MenuIcon> icons, Map<String, T> tempMap) {
         final Map<Integer, T> map = new HashMap<>();
@@ -106,7 +106,7 @@ public final class MenuAPI {
      * <p>解析成便于inventory利用的map</p>
      *
      * @param layouts 排版字符串
-     * @param icons 图标map
+     * @param icons   图标map
      * @return 数字和物品堆的map
      */
     public static Map<Integer, ItemStack> parseToInv(String layouts, Map<String, MenuIcon> icons) {
@@ -118,7 +118,7 @@ public final class MenuAPI {
      * <p>便于监听器调用</p>
      *
      * @param layouts 排版字符串
-     * @param icons 图标map
+     * @param icons   图标map
      * @return 数字与MenuIcon的map
      */
     public static Map<Integer, MenuIcon> parseIconsChar(String layouts, Map<String, MenuIcon> icons) {

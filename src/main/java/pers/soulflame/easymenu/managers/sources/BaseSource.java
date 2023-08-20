@@ -56,7 +56,7 @@ public class BaseSource extends ItemSource {
                 final NamespacedKey enchKey = NamespacedKey.minecraft(ench.toLowerCase());
                 final Enchantment enchantment = Enchantment.getByKey(enchKey);
                 if (enchantment == null) throw new NullPointerException("Enchantment must not be null");
-                item.addEnchantment(enchantment, level);
+                meta.addEnchant(enchantment, level, true);
             });
         }
         final Object itemFlags = map.get("item-flags");

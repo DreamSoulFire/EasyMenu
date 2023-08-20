@@ -11,16 +11,14 @@ import pers.soulflame.easymenu.listeners.PlayerCatchListener;
 import pers.soulflame.easymenu.listeners.PlayerClickInvListener;
 import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.managers.ItemSource;
-import pers.soulflame.easymenu.managers.functions.CatchFunction;
-import pers.soulflame.easymenu.managers.functions.CommandFunction;
-import pers.soulflame.easymenu.managers.functions.JSFunction;
-import pers.soulflame.easymenu.managers.functions.PointsFunction;
+import pers.soulflame.easymenu.managers.functions.*;
 import pers.soulflame.easymenu.managers.sources.BaseSource;
 import pers.soulflame.easymenu.managers.sources.NISource;
 import pers.soulflame.easymenu.utils.FileUtil;
 import pers.soulflame.easymenu.utils.TextUtil;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>插件主类</p>
@@ -73,21 +71,19 @@ public final class EasyMenu extends JavaPlugin {
     @Override
     public void onEnable() {
         addSource(new BaseSource("self"));
-        PluginManager manager = Bukkit.getPluginManager();
-        Plugin neigeItems = manager.getPlugin("NeigeItems");
+        final PluginManager manager = Bukkit.getPluginManager();
+        final Plugin neigeItems = manager.getPlugin("NeigeItems");
         if (neigeItems != null) addSource(new NISource("ni"));
 
         addFunction(new CatchFunction("catch"));
         addFunction(new CommandFunction("command"));
         addFunction(new JSFunction("js"));
-        Plugin playerPoints = manager.getPlugin("PlayerPoints");
+        final Plugin placeholderAPI = manager.getPlugin("PlaceholderAPI");
+        if (placeholderAPI != null) addFunction(new PAPIFunction("papi"));
+        final Plugin playerPoints = manager.getPlugin("PlayerPoints");
         if (playerPoints != null) addFunction(new PointsFunction("points"));
 
-        try {
-            FileUtil.loadAllFiles();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileUtil.loadAllFiles();
 
         register(new PlayerCatchListener());
         register(new PlayerClickInvListener());
@@ -103,6 +99,12 @@ public final class EasyMenu extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        TextUtil.sendMessage(FileUtil.getLanguage().getStringList("plugin.close"));
+        final List<String> list = FileUtil.getLanguage().getStringList("plugin.close");
+        final List<String> temp = new ArrayList<>(list.size());
+        for (final String line : list) {
+            temp.add(line.replace("<author>", getDescription().getAuthors().toString())
+                    .replace("<version>", getDescription().getVersion()));
+        }
+        TextUtil.sendMessage(temp);
     }
 }

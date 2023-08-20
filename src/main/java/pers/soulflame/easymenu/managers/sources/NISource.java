@@ -21,10 +21,10 @@ public class NISource extends ItemSource {
      */
     @Override
     protected ItemStack parseItem(Map<String, ?> map) {
-        Object value = map.get("value");
+        final Object value = map.get("value");
         if (value == null) throw new NullPointerException("Value must not be null");
-        String id = (String) value;
-        ItemGenerator item = ItemManager.INSTANCE.getItem(id);
+        final String id = (String) value;
+        final ItemGenerator item = ItemManager.INSTANCE.getItem(id);
         if (item == null) throw new NullPointerException("Item must not be null");
         return item.getItemStack(null, "");
     }

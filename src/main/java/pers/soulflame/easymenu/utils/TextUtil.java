@@ -30,17 +30,19 @@ public final class TextUtil {
      * <p>插件启动信息</p>
      */
     public static void startInfo() {
-        List<String> list = FileUtil.getLanguage().getStringList("plugin.start");
-        PluginDescriptionFile description = EasyMenu.getInstance().getDescription();
-        List<String> temp = new ArrayList<>();
-        for (String line : list) {
+        final List<String> list = FileUtil.getLanguage().getStringList("plugin.start");
+        final PluginDescriptionFile description = EasyMenu.getInstance().getDescription();
+        final List<String> temp = new ArrayList<>(list.size());
+        for (final String line : list) {
             temp.add(line.replace("<author>", description.getAuthors().toString())
                     .replace("<version>", description.getVersion())
                     .replace("<languages>", String.valueOf(FileUtil.getLangFiles().size()))
                     .replace("<lang>", FileUtil.getLang())
                     .replace("<menus>", String.valueOf(FileUtil.getMenuFiles().size()))
-                    .replace("<sources>", String.valueOf(ItemSource.getSources().size()))
-                    .replace("<functions>", String.valueOf(ItemFunction.getFunctions().size()))
+                    .replace("<source>", String.valueOf(ItemSource.getSources().size()))
+                    .replace("<sources>", ItemSource.getSources().keySet().toString())
+                    .replace("<function>", String.valueOf(ItemFunction.getFunctions().size()))
+                    .replace("<functions>", ItemFunction.getFunctions().keySet().toString())
                     .replace("<commands>", String.valueOf(MainCommand.getCommandMap().size()))
             );
         }
@@ -62,7 +64,7 @@ public final class TextUtil {
      * @param messages 需发送的信息
      */
     public static void sendMessage(List<String> messages) {
-        for (String message : messages) sendMessage(message);
+        for (final String message : messages) sendMessage(message);
     }
 
     /**
@@ -73,7 +75,7 @@ public final class TextUtil {
      * @param message 单行信息字符串
      */
     public static void sendMessage(CommandSender sender, String message) {
-        if (sender instanceof Player player)
+        if (sender instanceof final Player player)
             message = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, message);
         sender.sendMessage(color(prefix + message));
     }
@@ -85,7 +87,7 @@ public final class TextUtil {
      * @param messages 信息集合
      */
     public static void sendMessage(CommandSender sender, List<String> messages) {
-        for (String message : messages)
+        for (final String message : messages)
             sendMessage(sender, message);
     }
 
@@ -106,7 +108,7 @@ public final class TextUtil {
      * @return 解析后的文本
      */
     public static List<String> color(List<String> texts) {
-        final List<String> temp = new ArrayList<>();
+        final List<String> temp = new ArrayList<>(texts.size());
         for (final String text : texts) temp.add(color(text));
         return temp;
     }

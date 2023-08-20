@@ -1,5 +1,6 @@
 package pers.soulflame.easymenu.utils;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import pers.soulflame.easymenu.EasyMenu;
 import pers.soulflame.easymenu.api.MenuAPI;
@@ -7,10 +8,7 @@ import pers.soulflame.easymenu.managers.Menu;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>文件工具类</p>
@@ -89,11 +87,22 @@ public final class FileUtil {
     /**
      * <p>加载插件所有文件</p>
      */
-    public static void loadAllFiles() throws IOException {
+    public static void loadAllFiles() {
 
         final File folder = EasyMenu.getInstance().getDataFolder();
         FileUtil.createFile(folder, "config.yml");
         final YamlConfiguration config = getFileMap().get("config.yml").yamlConfiguration();
+        final ConfigurationSection scripts = config.getConfigurationSection("script-tools");
+        if (scripts != null) {
+            for (final String key : scripts.getKeys(false)) {
+                final String clazz = scripts.getString(key, "");
+                try {
+                    ScriptUtil.getEngine().put(key, Class.forName(clazz));
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
         lang = config.getString("language", "zh_cn") + ".yml";
         langFiles = getFiles(new File(folder, "languages"), true);

@@ -2,7 +2,7 @@ title: '&6一个测试用的菜单'
 size: 27
 layouts: |-
   #########
-  #!@$%^&*#
+  #!@$%^& #
   #########
 icons:
   #  适配NeigeItems物品库的写法
@@ -16,8 +16,7 @@ icons:
       name: '&7测试用'
       material: 'WHITE_STAINED_GLASS_PANE'
       lore:
-        - '&7这是一个测试 物品生成与unbreakable 的玻璃板'
-      unbreakable: true
+        - '&7这是一个测试普通物品生成的玻璃板'
   '!':
     source: 'self'
     item:
@@ -36,17 +35,13 @@ icons:
       name: '&a测试用'
       material: 'CARROT_ON_A_STICK'
       lore:
-        - '&7这是一个测试 CustomModelData 的胡萝卜钓竿'
-  '$':
-    source: 'self'
-    item:
-      name: '&a测试用'
-      material: 'DIAMOND_SWORD'
-      lore:
-        - '&7这是一个测试 enchantments 的钻石剑'
+        - '&7这是一个测试复杂物品生成的胡萝卜钓竿'
+      item-flags:
+        - 'HIDE_ATTRIBUTES'
+      unbreakable: true
       enchantments:
-        SHARPNESS: 5
-  '%':
+        SHARPNESS: 2
+  '$':
     source: 'self'
     item:
       name: '&a测试用'
@@ -59,7 +54,7 @@ icons:
       - type: 'command'
         value: |-
           [player]: say Catch the $catch
-  '^':
+  '%':
     source: 'self'
     item:
       name: '&a测试用'
@@ -70,23 +65,33 @@ icons:
       - type: 'js'
         value: |-
           print("test")
-  '&':
+  '^':
     source: 'self'
     item:
       name: '&a测试用'
       material: 'REDSTONE'
       lore:
-        - '&7这是一个测试 condition 的红石[大饼]'
+        - '&7这是一个测试 condition 的红石'
     functions:
-      - type: 'js'
+      - condition: |-
+          function check(player) {
+            TextUtil.static.sendMessage(player, "&a成功了耶!");
+            print("是否有权限: " + player.hasPermission("em.pass"));
+            return player.hasPermission("em.pass");
+          }
+        type: 'js'
         value: |-
           print("test")
-  '*':
+  '&':
     source: 'self'
     item:
       name: '&a测试用'
-      material: 'IRON_SWORD'
+      material: 'WHEAT'
       lore:
-        - '&7这是一个测试 item-flags 的铁剑'
-      item-flags:
-        - 'HIDE_ATTRIBUTES'
+        - '&7这是一个测试 papi 方法的小麦'
+    functions:
+      - type: 'papi'
+        value: '%player_level% < 5'
+      - type: 'command'
+        value: |-
+          [player]: say 成了

@@ -12,7 +12,7 @@ import java.util.List;
 public class HelpCommand extends BaseCommand {
     @Override
     public void onConsoleCommand(CommandSender sender, String[] args) {
-        List<String> help = FileUtil.getLanguage().getStringList("command.help");
+        final List<String> help = FileUtil.getLanguage().getStringList("command.help");
         TextUtil.sendMessage(sender, help);
     }
 

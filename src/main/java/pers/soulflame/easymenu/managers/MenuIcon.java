@@ -1,13 +1,12 @@
 package pers.soulflame.easymenu.managers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
+import pers.soulflame.easymenu.utils.ScriptUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> functions) {
 
@@ -34,22 +33,28 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
     /**
      * <p>执行物品功能</p>
      *
-     * @param player 需执行的玩家
+     * @param uuid 需执行的玩家
      */
-    public void runFunctions(Player player) {
+    public void runFunctions(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
         if (functions == null || functions.isEmpty()) return;
         ItemFunction itemFunction = null;
         final List<Map<?, ?>> temp = new ArrayList<>(functions);
+        boolean isContent = true;
         for (final Map<?, ?> function : functions) {
+            final Object condition = function.get("condition");
+            if (condition != null) {
+                isContent = ScriptUtil.check((String) condition, player);
+            }
+            if (!isContent) continue;
             final Object type = function.get("type");
             if (type == null) continue;
             itemFunction = ItemFunction.getFunction((String) type);
             if (itemFunction == null) continue;
             final Object value = function.get("value");
             if (value == null) continue;
-            if (!itemFunction.run(player, (String) value)) break;
-            if (!CatchFunction.catches.contains(player)) continue;
-            break;
+            if (!itemFunction.run(uuid, (String) value)) break;
+            if (CatchFunction.catches.contains(uuid)) break;
         }
         if (itemFunction == null) return;
         temp.remove(0);
@@ -59,16 +64,23 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
     /**
      * <p>执行捕获聊天信息后的物品功能</p>
      *
-     * @param player 玩家
+     * @param uuid 玩家
      */
-    public static void runAfterCatch(Player player) {
+    public static void runAfterCatch(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
         final Result result = tempMap.get(player);
         if (result == null) return;
         ItemFunction itemFunction = result.function();
         if (itemFunction == null) return;
         final List<Map<?, ?>> funList = result.funcMap();
         if (funList == null || funList.isEmpty()) return;
+        boolean isContent = true;
         for (final Map<?, ?> function : funList) {
+            final Object condition = function.get("condition");
+            if (condition != null) {
+                isContent = ScriptUtil.check((String) condition, player);
+            }
+            if (!isContent) continue;
             final Object type = function.get("type");
             if (type == null) continue;
             itemFunction = ItemFunction.getFunction((String) type);
@@ -76,9 +88,9 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
             final Object value = function.get("value");
             if (value == null) continue;
             String str = (String) value;
-            final String catchMsg = CatchFunction.tempMap.get(player);
+            final String catchMsg = CatchFunction.tempMap.get(uuid);
             if (catchMsg != null) str = str.replace("$catch", catchMsg);
-            if (!itemFunction.run(player, str)) break;
+            if (!itemFunction.run(uuid, str)) break;
         }
     }
 

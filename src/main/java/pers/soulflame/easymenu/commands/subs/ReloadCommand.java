@@ -7,19 +7,14 @@ import pers.soulflame.easymenu.commands.BaseCommand;
 import pers.soulflame.easymenu.utils.FileUtil;
 import pers.soulflame.easymenu.utils.TextUtil;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ReloadCommand extends BaseCommand {
     @Override
     public void onConsoleCommand(CommandSender sender, String[] args) {
-        String reload = FileUtil.getLanguage().getString("reload", "&a配置文件重载完成");
+        final String reload = FileUtil.getLanguage().getString("reload", "&a配置文件重载完成");
         TextUtil.sendMessage(sender, reload);
-        try {
-            FileUtil.loadAllFiles();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FileUtil.loadAllFiles();
     }
 
     @Override

@@ -17,7 +17,7 @@ public class PlayerClickInvListener implements Listener {
 
     @EventHandler
     public void cantMove(InventoryClickEvent event) {
-        Inventory inventory = event.getClickedInventory();
+        final Inventory inventory = event.getClickedInventory();
         if (inventory == null) return;
         InventoryHolder holder = inventory.getHolder();
         if (!(holder instanceof Menu)) return;
@@ -26,17 +26,17 @@ public class PlayerClickInvListener implements Listener {
 
     @EventHandler
     public void runFunction(InventoryClickEvent event) {
-        HumanEntity whoClicked = event.getWhoClicked();
-        if (!(whoClicked instanceof Player player)) return;
-        Inventory inventory = event.getClickedInventory();
+        final HumanEntity whoClicked = event.getWhoClicked();
+        if (!(whoClicked instanceof final Player player)) return;
+        final Inventory inventory = event.getClickedInventory();
         if (inventory == null) return;
-        InventoryHolder holder = inventory.getHolder();
-        if (!(holder instanceof Menu menu)) return;
-        int rawSlot = event.getRawSlot();
-        Map<Integer, MenuIcon> parseMap = MenuAPI.parseIconsChar(menu.layouts(), menu.icons());
-        MenuIcon icon = parseMap.get(rawSlot);
+        final InventoryHolder holder = inventory.getHolder();
+        if (!(holder instanceof final Menu menu)) return;
+        final int rawSlot = event.getRawSlot();
+        final Map<Integer, MenuIcon> parseMap = MenuAPI.parseIconsChar(menu.layouts(), menu.icons());
+        final MenuIcon icon = parseMap.get(rawSlot);
         if (icon == null) return;
-        icon.runFunctions(player);
+        icon.runFunctions(player.getUniqueId());
     }
 
 }

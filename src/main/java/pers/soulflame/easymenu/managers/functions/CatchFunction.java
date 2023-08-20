@@ -1,18 +1,16 @@
 package pers.soulflame.easymenu.managers.functions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.utils.TextUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CatchFunction extends ItemFunction {
 
-    public static List<Player> catches = new ArrayList<>();
-    public static Map<Player, String> tempMap = new HashMap<>();
+    public static List<UUID> catches = new ArrayList<>();
+    public static Map<UUID, String> tempMap = new HashMap<>();
 
     public CatchFunction(String key) {
         super(key);
@@ -21,14 +19,16 @@ public class CatchFunction extends ItemFunction {
     /**
      * <p>执行聊天信息捕获操作</p>
      *
-     * @param player 玩家
+     * @param uuid 玩家
      * @param string 发送的信息
      * @return 是否执行成功
      */
     @Override
-    protected boolean run(Player player, String string) {
+    protected boolean run(UUID uuid, String string) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return false;
         TextUtil.sendMessage(player, string);
-        catches.add(player);
+        catches.add(uuid);
         player.closeInventory();
         return true;
     }

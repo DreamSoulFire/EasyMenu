@@ -1,1 +1,4 @@
 language: 'zh_cn'
+
+script-tools:
+#  PlaceholderAPI: "me.clip.placeholderapi.PlaceholderAPI"
