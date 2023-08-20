@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import pers.soulflame.easymenu.managers.Menu;
 import pers.soulflame.easymenu.utils.TextUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ public final class MenuAPI {
     private MenuAPI() {
 
     }
+
+    public record Result(String str, Integer slot) {}
 
     /**
      * <p>从菜单yaml文件中加载菜单实例</p>
@@ -66,19 +69,17 @@ public final class MenuAPI {
      * @param layouts 需解析的字符串
      * @return 解析后的map
      */
-    public static Map<String, Integer> parseLayout(String layouts) {
-        final Map<String, Integer> layoutMap = new HashMap<>();
+    public static List<Result> parseLayout(String layouts) {
+        final List<Result> layoutList = new ArrayList<>();
         if (layouts.length() % 9 != 0) throw new NullPointerException("Inventory's size must not higher than 6 lines");
         int i = 0;
         final char[] charArray = layouts.toCharArray();
-        for (int j = 0; j < charArray.length; i++, j++) {
-            final char c = charArray[j];
+        for (final char c : charArray) {
             final String key = String.valueOf(c);
-            if (key.isEmpty()) continue;
-            layoutMap.put(key, i);
+            layoutList.add(new Result(key, i++));
         }
         if (i > 54) throw new NullPointerException("Inventory's size must not higher than 54, but you set " + i);
-        return layoutMap;
+        return layoutList;
     }
 
     /**
@@ -90,12 +91,14 @@ public final class MenuAPI {
      * @return ?
      * @param <T> ?
      */
-    @SuppressWarnings("unchecked")
-    public static <T> Map<Integer, T> parse(String layouts, Map<String, Menu.MenuIcon> icons, Map<String, ?> tempMap) {
+    public static <T> Map<Integer, T> parse(String layouts, Map<String, Menu.MenuIcon> icons, Map<String, T> tempMap) {
         final Map<Integer, T> map = new HashMap<>();
-        final Map<String, Integer> layout = parseLayout(layouts);
+        final List<Result> layout = parseLayout(layouts);
         for (final String str : icons.keySet())
-            map.put(layout.get(str), (T) tempMap.get(str));
+            for (final Result result : layout) {
+                if (!result.str().equals(str)) continue;
+                map.put(result.slot(), tempMap.get(str));
+            }
         return map;
     }
 
