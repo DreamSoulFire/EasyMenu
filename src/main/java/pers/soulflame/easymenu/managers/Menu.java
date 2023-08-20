@@ -57,6 +57,7 @@ public class Menu implements InventoryHolder {
      * @param player 需打开界面的玩家
      */
     public void open(Player player) {
+        player.closeInventory();
         player.openInventory(getInventory());
     }
 
