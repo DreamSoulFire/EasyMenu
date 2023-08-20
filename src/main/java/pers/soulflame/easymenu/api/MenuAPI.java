@@ -38,10 +38,7 @@ public final class MenuAPI {
             final String source = section.getString("source", "self");
             final List<Map<?, ?>> functions = section.getMapList("functions");
             final ConfigurationSection itemSec = section.getConfigurationSection("item");
-            if (itemSec == null) {
-                iconMap.put(key, new Menu.MenuIcon(source, new HashMap<>(), functions));
-                continue;
-            }
+            if (itemSec == null) throw new NullPointerException("Item must not be null");
             final Map<String, Object> itemMap = new HashMap<>();
             itemMap.put("name", itemSec.getString("name", null));
             itemMap.put("material", itemSec.getString("material", "STONE"));
