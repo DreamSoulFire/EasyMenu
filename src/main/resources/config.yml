@@ -1,4 +1,28 @@
+# 修改语言文件
+# Change the language of EasyMenu
 language: 'zh_cn'
 
+# 修改物品功能内部注册名
+# Change item function's key
+# [需重启服务器]
+# Must restart the server
+functions:
+  catch: 'catch'
+  command: 'command'
+  java-script: 'js'
+#  vault: 'money'
+#  placeholderapi: 'papi'
+#  player-points: 'points'
+
+# 修改物品源内部注册名
+# Change item source's key
+# [需重启服务器]
+# Must restart the server
+sources:
+  easy-menu: 'self'
+#  neige-items: 'ni'
+
+# 自定义js工具类
+# Customize the tools of java-script
 script-tools:
 #  PlaceholderAPI: "me.clip.placeholderapi.PlaceholderAPI"

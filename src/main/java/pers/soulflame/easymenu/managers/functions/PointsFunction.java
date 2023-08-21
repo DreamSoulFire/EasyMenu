@@ -1,9 +1,9 @@
 package pers.soulflame.easymenu.managers.functions;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.utils.FileUtil;
@@ -25,15 +25,16 @@ public class PointsFunction extends ItemFunction {
      */
     @Override
     protected boolean run(UUID uuid, String string) {
-        Player player = Bukkit.getPlayer(uuid);
+        final Player player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
-        final YamlConfiguration language = FileUtil.getLanguage();
         final PlayerPointsAPI api = PlayerPoints.getInstance().getAPI();
         int have = api.look(uuid);
         final int need = Integer.parseInt(string);
         if (have - need < 0) {
-            final String noEnough = language.getString("plugin.points-not-enough", "&c你的点券不足");
-            TextUtil.sendMessage(player, noEnough);
+            String notEnough = FileUtil.getLanguage().getString("plugin.points-not-enough",
+                    "&c你的点券不足, 需要 &b<need>&c, 但你只有 &6%playerpoints_points%");
+            notEnough = PlaceholderAPI.setPlaceholders(player, notEnough).replace("<need>", String.valueOf(need));
+            TextUtil.sendMessage(player, notEnough);
             return false;
         }
         have -= need;

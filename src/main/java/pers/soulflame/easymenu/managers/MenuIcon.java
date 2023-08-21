@@ -3,6 +3,8 @@ package pers.soulflame.easymenu.managers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import pers.soulflame.easymenu.api.FunctionAPI;
+import pers.soulflame.easymenu.api.SourceAPI;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
 import pers.soulflame.easymenu.utils.ScriptUtil;
 
@@ -14,20 +16,21 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
 
     }
 
-    private static final Map<Player, Result> tempMap = new HashMap<>();
+    private static final Map<UUID, Result> tempMap = new HashMap<>();
 
     /**
      * <p>根据物品源解析</p>
      *
+     * @param uuid 玩家uuid
      * @param key 物品源的内部名
      * @return 解析后的物品堆
      */
-    public ItemStack parseItem(String key) {
-        final ItemSource self = ItemSource.getSource(key);
+    public ItemStack parseItem(UUID uuid, String key) {
+        final ItemSource self = SourceAPI.getSource(key);
         if (self == null) {
             throw new NullPointerException("Item source must not be null");
         }
-        return self.parseItem(item);
+        return self.parseItem(uuid, item);
     }
 
     /**
@@ -36,7 +39,7 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
      * @param uuid 需执行的玩家
      */
     public void runFunctions(UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
+        final Player player = Bukkit.getPlayer(uuid);
         if (functions == null || functions.isEmpty()) return;
         ItemFunction itemFunction = null;
         final List<Map<?, ?>> temp = new ArrayList<>(functions);
@@ -49,7 +52,7 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
             if (!isContent) continue;
             final Object type = function.get("type");
             if (type == null) continue;
-            itemFunction = ItemFunction.getFunction((String) type);
+            itemFunction = FunctionAPI.getFunction((String) type);
             if (itemFunction == null) continue;
             final Object value = function.get("value");
             if (value == null) continue;
@@ -58,7 +61,7 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
         }
         if (itemFunction == null) return;
         temp.remove(0);
-        tempMap.put(player, new Result(itemFunction, temp));
+        tempMap.put(uuid, new Result(itemFunction, temp));
     }
 
     /**
@@ -67,8 +70,8 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
      * @param uuid 玩家
      */
     public static void runAfterCatch(UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
-        final Result result = tempMap.get(player);
+        final Player player = Bukkit.getPlayer(uuid);
+        final Result result = tempMap.get(uuid);
         if (result == null) return;
         ItemFunction itemFunction = result.function();
         if (itemFunction == null) return;
@@ -83,7 +86,7 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> funct
             if (!isContent) continue;
             final Object type = function.get("type");
             if (type == null) continue;
-            itemFunction = ItemFunction.getFunction((String) type);
+            itemFunction = FunctionAPI.getFunction((String) type);
             if (itemFunction == null) continue;
             final Object value = function.get("value");
             if (value == null) continue;

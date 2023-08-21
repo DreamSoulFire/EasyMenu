@@ -4,9 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import pers.soulflame.easymenu.api.MenuAPI;
 
 import java.util.Map;
 
@@ -23,8 +21,6 @@ public record Menu(String title, Integer size, String layouts, Map<String, MenuI
         this.layouts = layouts;
         this.icons = icons;
         inventory = Bukkit.createInventory(this, size, title);
-        final Map<Integer, ItemStack> items = MenuAPI.parseToInv(layouts(), icons());
-        items.forEach((slot, item) -> getInventory().setItem(slot, item));
     }
 
     /**

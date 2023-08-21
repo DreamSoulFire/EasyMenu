@@ -7,13 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import pers.soulflame.easymenu.api.MenuAPI;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import javax.script.*;
+import java.util.*;
 
 public class ScriptUtil {
 
@@ -33,6 +28,8 @@ public class ScriptUtil {
         engine.put("TextUtil", TextUtil.class);
     }
 
+    private static final Map<String, CompiledScript> scriptMap = new HashMap<>();
+
     /**
      * <p>获取脚本引擎</p>
      *
@@ -40,6 +37,15 @@ public class ScriptUtil {
      */
     public static ScriptEngine getEngine() {
         return engine;
+    }
+
+    /**
+     * <p>获取预编译后的js</p>
+     *
+     * @return 预编译后的js
+     */
+    public static Map<String, CompiledScript> getScriptMap() {
+        return scriptMap;
     }
 
     /**
@@ -51,10 +57,10 @@ public class ScriptUtil {
      */
     public static boolean check(String script, Player player) {
         eval(script);
-        Invocable invocable = (Invocable) engine;
+        final Invocable invocable = (Invocable) getEngine();
         try {
-            Object check = invocable.invokeFunction("check", player);
-            if (!(check instanceof Boolean result)) return false;
+            final Object check = invocable.invokeFunction("check", player);
+            if (!(check instanceof final Boolean result)) return false;
             if (result != Boolean.FALSE && result != Boolean.TRUE) return false;
             return result;
         } catch (ScriptException | NoSuchMethodException e) {
@@ -69,8 +75,16 @@ public class ScriptUtil {
      * @return 返回值
      */
     public static Object eval(String script) {
+        final Map<String, CompiledScript> tempMap = getScriptMap();
+        final CompiledScript temp = tempMap.get(script);
         try {
-            return engine.eval(script);
+            if (temp == null) {
+                final Compilable compilable = (Compilable) getEngine();
+                final CompiledScript compiledScript = compilable.compile(script);
+                tempMap.put(script, compiledScript);
+                return compiledScript.eval();
+            }
+            return temp.eval();
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }

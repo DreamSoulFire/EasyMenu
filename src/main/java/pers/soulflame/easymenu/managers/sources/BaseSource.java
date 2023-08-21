@@ -1,8 +1,11 @@
 package pers.soulflame.easymenu.managers.sources;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -11,6 +14,7 @@ import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class BaseSource extends ItemSource {
 
@@ -21,31 +25,40 @@ public class BaseSource extends ItemSource {
     /**
      * <p>通过本插件直接解析物品</p>
      *
-     * @param map 被解析的map
+     * @param uuid 解析变量的玩家
+     * @param map  被解析的map
      * @return 物品堆
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected ItemStack parseItem(Map<String, ?> map) {
+    protected ItemStack parseItem(UUID uuid, Map<String, ?> map) {
+        Player player = null;
+        if (uuid != null) player = Bukkit.getPlayer(uuid);
         if (map == null) throw new NullPointerException("The config of Item must not be null");
         final Object material = map.get("material");
         if (material == null) throw new NullPointerException("Material must not be null");
         final String aMaterial = material.toString();
         if (aMaterial.contains(":"))
-            throw new IllegalArgumentException("the character \":\" isn't a legal argument");
+            throw new IllegalArgumentException("the character \":\" is a illegal argument");
         final Material type = Material.matchMaterial(aMaterial);
-        if (type == null) throw new NullPointerException("Material must not be null");
+        if (type == null) throw new NullPointerException("Wrong material of item " + aMaterial);
         final ItemStack item = new ItemStack(type);
         if (Material.AIR.equals(item.getType()) || item.getAmount() <= 0)
             throw new NullPointerException("Item must not be null");
         final ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new NullPointerException("Item's meta must not be null");
         final Object name = map.get("name");
-        if (name != null)
-            meta.setDisplayName(TextUtil.color(name.toString()));
+        if (name != null) {
+            String displayName = player == null ? name.toString() :
+                    PlaceholderAPI.setPlaceholders(player, name.toString());
+            meta.setDisplayName(TextUtil.color(displayName));
+        }
         final Object lore = map.get("lore");
-        if (lore != null)
-            meta.setLore(TextUtil.color((List<String>) lore));
+        if (lore != null) {
+            List<String> lores = player == null ? (List<String>) lore :
+                    PlaceholderAPI.setPlaceholders(player, (List<String>) lore);
+            meta.setLore(TextUtil.color(lores));
+        }
         final Object customModelData = map.get("custom-model-data");
         if (customModelData != null)
             meta.setCustomModelData((Integer) customModelData);
@@ -55,7 +68,7 @@ public class BaseSource extends ItemSource {
             enchants.forEach((ench, level) -> {
                 final NamespacedKey enchKey = NamespacedKey.minecraft(ench.toLowerCase());
                 final Enchantment enchantment = Enchantment.getByKey(enchKey);
-                if (enchantment == null) throw new NullPointerException("Enchantment must not be null");
+                if (enchantment == null) throw new NullPointerException("Enchantment must not be null, but you set " + ench);
                 meta.addEnchant(enchantment, level, true);
             });
         }

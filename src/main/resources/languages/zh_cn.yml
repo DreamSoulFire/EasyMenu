@@ -34,7 +34,8 @@ plugin:
     - '&a插件作者: &b<author>'
     - '&a插件版本: &5<version>'
     - '&6&m                                                '
-  points-not-enough: '&c你的点券不足'
+  points-not-enough: '&c你的点券不足, 需要 &b<need>&c, 但你只有 &6%playerpoints_points%'
+  money-not-enough: '&c你的金币不足, 需要 &b<need>&c, 但你只有 &6%vault_eco_balance_fixed%'
 command:
   help:
     - '&6&m                                                '

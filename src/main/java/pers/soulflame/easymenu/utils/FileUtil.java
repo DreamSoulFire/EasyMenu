@@ -8,7 +8,10 @@ import pers.soulflame.easymenu.managers.Menu;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>文件工具类</p>
@@ -85,15 +88,24 @@ public final class FileUtil {
     }
 
     /**
+     * <p>获取配置文件</p>
+     *
+     * @return 配置文件
+     */
+    public static YamlConfiguration getConfig() {
+        return getYaml("config.yml");
+    }
+
+    /**
      * <p>加载插件所有文件</p>
      */
     public static void loadAllFiles() {
 
         final File folder = EasyMenu.getInstance().getDataFolder();
         FileUtil.createFile(folder, "config.yml");
-        final YamlConfiguration config = getFileMap().get("config.yml").yamlConfiguration();
+        final YamlConfiguration config = getConfig();
         final ConfigurationSection scripts = config.getConfigurationSection("script-tools");
-        if (scripts != null) {
+        if (scripts != null)
             for (final String key : scripts.getKeys(false)) {
                 final String clazz = scripts.getString(key, "");
                 try {
@@ -102,11 +114,10 @@ public final class FileUtil {
                     throw new RuntimeException(e);
                 }
             }
-        }
 
         lang = config.getString("language", "zh_cn") + ".yml";
         langFiles = getFiles(new File(folder, "languages"), true);
-        String langName = "languages/zh_cn.yml";
+        final String langName = "languages/zh_cn.yml";
         if (langFiles.isEmpty()) {
             FileUtil.createFile(folder, langName);
             langFiles.add(getFile(langName));
@@ -118,7 +129,7 @@ public final class FileUtil {
         TextUtil.prefix = language.getString("prefix", "&7[&aEasy&6Menu&7] ");
 
         menuFiles = FileUtil.getFiles(new File(folder, "menus"), true);
-        String menuName = "menus/example.yml";
+        final String menuName = "menus/example.yml";
         if (menuFiles.isEmpty()) {
             FileUtil.createFile(folder, menuName);
             menuFiles.add(getFile(menuName));
@@ -137,9 +148,12 @@ public final class FileUtil {
      */
     public static void createFile(File folder, String name) {
         final File file = new File(folder, name);
-        fileMap.put(name, new Result(file, YamlConfiguration.loadConfiguration(file)));
-        if (file.exists()) return;
+        if (file.exists()) {
+            fileMap.put(name, new Result(file, YamlConfiguration.loadConfiguration(file)));
+            return;
+        }
         EasyMenu.getInstance().saveResource(name, false);
+        fileMap.put(name, new Result(file, YamlConfiguration.loadConfiguration(file)));
     }
 
     /**
@@ -150,6 +164,16 @@ public final class FileUtil {
      */
     public static File getFile(String name) {
         return getFileMap().get(name).file();
+    }
+
+    /**
+     * <p>从Map缓存中获取文件</p>
+     *
+     * @param name 文件注册名
+     * @return 文件
+     */
+    public static YamlConfiguration getYaml(String name) {
+        return getFileMap().get(name).yamlConfiguration();
     }
 
     /**

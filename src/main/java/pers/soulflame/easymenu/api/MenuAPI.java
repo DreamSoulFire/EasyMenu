@@ -7,10 +7,7 @@ import pers.soulflame.easymenu.managers.Menu;
 import pers.soulflame.easymenu.managers.MenuIcon;
 import pers.soulflame.easymenu.utils.TextUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class MenuAPI {
 
@@ -83,13 +80,13 @@ public final class MenuAPI {
     }
 
     /**
-     * <p>不好说明 反正是为了提高复用性(</p>
+     * <p>解析工具(</p>
      *
      * @param layouts 界面排版字符串
      * @param icons   图标map
-     * @param tempMap ?
-     * @param <T>     ?
-     * @return ?
+     * @param tempMap 缓存用的map
+     * @param <T>     决定返回值
+     * @return 返回值为T的map
      */
     public static <T> Map<Integer, T> parse(String layouts, Map<String, MenuIcon> icons, Map<String, T> tempMap) {
         final Map<Integer, T> map = new HashMap<>();
@@ -109,8 +106,8 @@ public final class MenuAPI {
      * @param icons   图标map
      * @return 数字和物品堆的map
      */
-    public static Map<Integer, ItemStack> parseToInv(String layouts, Map<String, MenuIcon> icons) {
-        return parse(layouts, icons, parseIconsItem(icons));
+    public static Map<Integer, ItemStack> parseToInv(String layouts, Map<String, MenuIcon> icons, UUID uuid) {
+        return parse(layouts, icons, parseIconsItem(uuid, icons));
     }
 
     /**
@@ -131,12 +128,12 @@ public final class MenuAPI {
      * @param icons 图标map
      * @return 对应字符和物品堆的map
      */
-    public static Map<String, ItemStack> parseIconsItem(Map<String, MenuIcon> icons) {
+    public static Map<String, ItemStack> parseIconsItem(UUID uuid, Map<String, MenuIcon> icons) {
         final Map<String, ItemStack> itemMap = new HashMap<>();
         for (final Map.Entry<String, MenuIcon> entry : icons.entrySet()) {
             final String key = entry.getKey();
             final MenuIcon icon = entry.getValue();
-            itemMap.put(key, icon.parseItem(icon.source()));
+            itemMap.put(key, icon.parseItem(uuid, icon.source()));
         }
         return itemMap;
     }

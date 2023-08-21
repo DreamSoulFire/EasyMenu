@@ -8,9 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import pers.soulflame.easymenu.EasyMenu;
+import pers.soulflame.easymenu.api.FunctionAPI;
+import pers.soulflame.easymenu.api.SourceAPI;
 import pers.soulflame.easymenu.commands.MainCommand;
-import pers.soulflame.easymenu.managers.ItemFunction;
-import pers.soulflame.easymenu.managers.ItemSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +39,10 @@ public final class TextUtil {
                     .replace("<languages>", String.valueOf(FileUtil.getLangFiles().size()))
                     .replace("<lang>", FileUtil.getLang())
                     .replace("<menus>", String.valueOf(FileUtil.getMenuFiles().size()))
-                    .replace("<source>", String.valueOf(ItemSource.getSources().size()))
-                    .replace("<sources>", ItemSource.getSources().keySet().toString())
-                    .replace("<function>", String.valueOf(ItemFunction.getFunctions().size()))
-                    .replace("<functions>", ItemFunction.getFunctions().keySet().toString())
+                    .replace("<source>", String.valueOf(SourceAPI.getSources().size()))
+                    .replace("<sources>", SourceAPI.getSources().keySet().toString())
+                    .replace("<function>", String.valueOf(FunctionAPI.getFunctions().size()))
+                    .replace("<functions>", FunctionAPI.getFunctions().keySet().toString())
                     .replace("<commands>", String.valueOf(MainCommand.getCommandMap().size()))
             );
         }
