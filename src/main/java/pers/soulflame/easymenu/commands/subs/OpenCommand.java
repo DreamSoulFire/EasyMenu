@@ -10,10 +10,7 @@ import pers.soulflame.easymenu.managers.Menu;
 import pers.soulflame.easymenu.utils.FileUtil;
 import pers.soulflame.easymenu.utils.TextUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OpenCommand extends BaseCommand {
     @Override
@@ -56,17 +53,17 @@ public class OpenCommand extends BaseCommand {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (!"open".equalsIgnoreCase(args[0])) return null;
         switch (args.length) {
-            case 2 -> {
+            case 2: {
                 final Collection<? extends Player> allPlayer = Bukkit.getOnlinePlayers();
                 final List<String> players = new ArrayList<>(allPlayer.size());
                 for (final Player player : allPlayer) players.add(player.getName());
                 return players;
             }
-            case 3 -> {
+            case 3: {
                 return new ArrayList<>(FileUtil.getMenuMap().keySet());
             }
-            case 4 -> {
-                return List.of("true", "false");
+            case 4: {
+                return Arrays.asList("true", "false");
             }
         }
         return null;

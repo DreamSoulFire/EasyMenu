@@ -3,7 +3,6 @@ package pers.soulflame.easymenu.utils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -75,8 +74,8 @@ public final class TextUtil {
      * @param message 单行信息字符串
      */
     public static void sendMessage(CommandSender sender, String message) {
-        if (sender instanceof final Player player)
-            message = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, message);
+        if (sender instanceof Player )
+            message = PlaceholderAPI.setPlaceholders((Player) sender, message);
         sender.sendMessage(color(prefix + message));
     }
 

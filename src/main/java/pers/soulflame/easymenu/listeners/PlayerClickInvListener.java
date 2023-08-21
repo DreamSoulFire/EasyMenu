@@ -27,11 +27,14 @@ public class PlayerClickInvListener implements Listener {
     @EventHandler
     public void runFunction(InventoryClickEvent event) {
         final HumanEntity whoClicked = event.getWhoClicked();
-        if (!(whoClicked instanceof final Player player)) return;
+        if (!(whoClicked instanceof Player)) return;
+        final Player player = ((Player) whoClicked).getPlayer();
+        if (player == null) return;
         final Inventory inventory = event.getClickedInventory();
         if (inventory == null) return;
         final InventoryHolder holder = inventory.getHolder();
-        if (!(holder instanceof final Menu menu)) return;
+        if (!(holder instanceof Menu)) return;
+        final Menu menu = (Menu) holder;
         final int rawSlot = event.getRawSlot();
         final Map<Integer, MenuIcon> parseMap = MenuAPI.parseIconsChar(menu.layouts(), menu.icons());
         final MenuIcon icon = parseMap.get(rawSlot);

@@ -15,11 +15,11 @@ public class PAPIFunction extends ItemFunction {
 
     @Override
     protected boolean run(UUID uuid, String string) {
-        Player player = Bukkit.getPlayer(uuid);
+        final Player player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
         string = PlaceholderAPI.setPlaceholders(player, string);
-        Object eval = ScriptUtil.eval(string);
-        if (!(eval instanceof Boolean result)) return false;
-        return result;
+        final Object eval = ScriptUtil.eval(string);
+        if (!(eval instanceof Boolean)) return false;
+        return (Boolean) eval;
     }
 }

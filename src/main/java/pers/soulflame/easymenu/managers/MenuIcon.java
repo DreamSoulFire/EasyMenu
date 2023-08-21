@@ -10,10 +10,101 @@ import pers.soulflame.easymenu.utils.ScriptUtil;
 
 import java.util.*;
 
-public record MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> functions) {
+public class MenuIcon {
 
-    private record Result(ItemFunction function, List<Map<?, ?>> funcMap) {
+    private final String source;
+    private final Map<String, ?> item;
+    private final List<Map<?, ?>> functions;
 
+    public MenuIcon(String source, Map<String, ?> item, List<Map<?, ?>> functions) {
+        this.source = source;
+        this.item = item;
+        this.functions = functions;
+    }
+
+    public String source() {
+        return source;
+    }
+
+    public Map<String, ?> item() {
+        return item;
+    }
+
+    public List<Map<?, ?>> functions() {
+        return functions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuIcon)) return false;
+
+        MenuIcon menuIcon = (MenuIcon) o;
+
+        if (!Objects.equals(source, menuIcon.source)) return false;
+        if (!Objects.equals(item, menuIcon.item)) return false;
+        return Objects.equals(functions, menuIcon.functions);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = source != null ? source.hashCode() : 0;
+        result = 31 * result + (item != null ? item.hashCode() : 0);
+        result = 31 * result + (functions != null ? functions.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuIcon{" +
+                "source='" + source + '\'' +
+                ", item=" + item +
+                ", functions=" + functions +
+                '}';
+    }
+
+    private static class Result {
+        private final ItemFunction function;
+        private final List<Map<?, ?>> funcMap;
+
+        public Result(ItemFunction function, List<Map<?, ?>> funcMap) {
+            this.function = function;
+            this.funcMap = funcMap;
+        }
+
+        public ItemFunction function() {
+            return function;
+        }
+
+        public List<Map<?, ?>> funcMap() {
+            return funcMap;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Result)) return false;
+
+            Result result = (Result) o;
+
+            if (!Objects.equals(function, result.function)) return false;
+            return Objects.equals(funcMap, result.funcMap);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = function != null ? function.hashCode() : 0;
+            result = 31 * result + (funcMap != null ? funcMap.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Result{" +
+                    "function=" + function +
+                    ", funcMap=" + funcMap +
+                    '}';
+        }
     }
 
     private static final Map<UUID, Result> tempMap = new HashMap<>();

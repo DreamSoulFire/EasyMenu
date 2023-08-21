@@ -8,10 +8,7 @@ import pers.soulflame.easymenu.managers.Menu;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>文件工具类</p>
@@ -22,8 +19,49 @@ public final class FileUtil {
 
     }
 
-    public record Result(File file, YamlConfiguration yamlConfiguration) {
+    public static class Result {
 
+        private final File file;
+        private final YamlConfiguration yamlConfiguration;
+
+        public Result(File file, YamlConfiguration yamlConfiguration) {
+            this.file = file;
+            this.yamlConfiguration = yamlConfiguration;
+        }
+
+        public File file() {
+            return file;
+        }
+
+        public YamlConfiguration yamlConfiguration() {
+            return yamlConfiguration;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Result)) return false;
+
+            Result result = (Result) o;
+
+            if (!Objects.equals(file, result.file)) return false;
+            return Objects.equals(yamlConfiguration, result.yamlConfiguration);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = file != null ? file.hashCode() : 0;
+            result = 31 * result + (yamlConfiguration != null ? yamlConfiguration.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Result{" +
+                    "file=" + file +
+                    ", yamlConfiguration=" + yamlConfiguration +
+                    '}';
+        }
     }
 
     private static final Map<String, Result> fileMap = new HashMap<>();

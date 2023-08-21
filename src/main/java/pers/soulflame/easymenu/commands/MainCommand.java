@@ -74,11 +74,11 @@ public class MainCommand implements TabExecutor {
             return false;
         }
         final String[] strings = Arrays.copyOfRange(args, 1, args.length);
-        if (!(sender instanceof final Player player)) {
+        if (!(sender instanceof Player)) {
             manager.onConsoleCommand(sender, strings);
             return true;
         }
-        manager.onPlayerCommand(player, strings);
+        manager.onPlayerCommand((Player) sender, strings);
         return true;
     }
 

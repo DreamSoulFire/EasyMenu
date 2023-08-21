@@ -15,8 +15,23 @@ public final class MenuAPI {
 
     }
 
-    public record Result(String str, Integer slot) {
+    public static class Result {
 
+        private final String str;
+        private final Integer slot;
+
+        public Result(String str, Integer slot) {
+            this.str = str;
+            this.slot = slot;
+        }
+
+        public String str() {
+            return str;
+        }
+
+        public Integer slot() {
+            return slot;
+        }
     }
 
     /**

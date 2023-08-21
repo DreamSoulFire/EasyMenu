@@ -1,10 +1,10 @@
 package pers.soulflame.easymenu.utils;
 
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import pers.soulflame.easymenu.api.MenuAPI;
 
 import javax.script.*;
@@ -60,9 +60,8 @@ public class ScriptUtil {
         final Invocable invocable = (Invocable) getEngine();
         try {
             final Object check = invocable.invokeFunction("check", player);
-            if (!(check instanceof final Boolean result)) return false;
-            if (result != Boolean.FALSE && result != Boolean.TRUE) return false;
-            return result;
+            if (!(check instanceof Boolean)) return false;
+            return (boolean) (Boolean) check;
         } catch (ScriptException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
