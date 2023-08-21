@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'pers.soulflame'
-version = '1.0.3'
+version = '1.0.4'
 
 repositories {
     mavenCentral()
@@ -58,7 +58,7 @@ java {
 shadowJar {
     relocate('org.objectweb.asm', 'easymenu.org.objectweb.asm')
     relocate('org.openjdk.nashorn', 'easymenu.org.openjdk.nashorn')
-    archiveClassifier.set("")
+    archiveClassifier.set("active")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -85,8 +85,4 @@ processResources {
 
 tasks.javadoc {
     destinationDir(file("./docs"))
-}
-
-tasks.shadowJar {
-    destinationDirectory.set file("C:\\Users\\D_SoulFlame\\Desktop\\盘灵服务端\\paper\\plugins")
 }

@@ -21,7 +21,7 @@ public class MoneyFunction extends ItemFunction {
     protected boolean run(UUID uuid, String string) {
         final Player player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
-        final Economy economy = EasyMenu.getEconomy();
+        final Economy economy = (Economy) EasyMenu.getEconomy();
         final double balance = economy.getBalance(player);
         final double need = Double.parseDouble(string);
         final double take = balance - need;

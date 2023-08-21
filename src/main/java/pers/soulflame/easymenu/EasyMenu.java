@@ -34,14 +34,14 @@ public final class EasyMenu extends JavaPlugin {
 
     private static Plugin instance;
 
-    private static Economy economy;
+    private static Object economy;
 
     /**
      * <p>获取vault插件的economy</p>
      *
      * @return economy实例
      */
-    public static Economy getEconomy() {
+    public static Object getEconomy() {
         return economy;
     }
 
@@ -100,9 +100,6 @@ public final class EasyMenu extends JavaPlugin {
             easymenu.setTabCompleter(new MainCommand());
         }
 
-        RegisteredServiceProvider<Economy> registration = Bukkit.getServicesManager().getRegistration(Economy.class);
-        if (registration != null) economy = registration.getProvider();
-
         YamlConfiguration config = FileUtil.getConfig();
         ConfigurationSection section = config.getConfigurationSection("sources");
         if (section == null) throw new NullPointerException("Section sources must not be null");
@@ -121,7 +118,11 @@ public final class EasyMenu extends JavaPlugin {
         final Plugin playerPoints = manager.getPlugin("PlayerPoints");
         if (playerPoints != null) addFunction(new PointsFunction(section.getString("player-points", "points")));
         final Plugin vault = manager.getPlugin("Vault");
-        if (vault != null) addFunction(new MoneyFunction(section.getString("vault", "money")));
+        if (vault != null) {
+            RegisteredServiceProvider<Economy> registration = Bukkit.getServicesManager().getRegistration(Economy.class);
+            if (registration != null) economy = registration.getProvider();
+            addFunction(new MoneyFunction(section.getString("vault", "money")));
+        }
 
         TextUtil.startInfo();
     }
