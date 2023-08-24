@@ -1,117 +1,61 @@
 package pers.soulflame.easymenu.api;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import pers.soulflame.easymenu.managers.Menu;
 import pers.soulflame.easymenu.managers.MenuIcon;
 import pers.soulflame.easymenu.utils.TextUtil;
+import pers.soulflame.easymenu.utils.YamlUtil;
 
-import java.util.*;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * <p>菜单相关api</p>
+ */
 public final class MenuAPI {
 
     private MenuAPI() {
 
     }
 
-    public static class Result {
 
-        private final String str;
-        private final Integer slot;
+    /**
+     * <p>缓存类</p>
+     *
+     * @param string 字符
+     * @param item 图标物品
+     * @param icon 图标对象
+     */
+    public record Result(String string, ItemStack item, MenuIcon icon) {
 
-        public Result(String str, Integer slot) {
-            this.str = str;
-            this.slot = slot;
-        }
-
-        public String str() {
-            return str;
-        }
-
-        public Integer slot() {
-            return slot;
-        }
     }
+
 
     /**
      * <p>从菜单yaml文件中加载菜单实例</p>
      *
-     * @param yaml 需加载的yaml文件
+     * @param path 需加载的yaml文件路径
      * @return 菜单实例
      */
-    public static Menu loadMenu(YamlConfiguration yaml) {
-        final String title = yaml.getString("title", "&f未配置菜单标题名");
-        final Integer size = yaml.getInt("size", 54);
-        final String layouts = yaml.getString("layouts", "").replace("\n", "");
-        final ConfigurationSection icons = yaml.getConfigurationSection("icons");
-        if (icons == null) throw new NullPointerException("Icons must not be null");
-        final Map<String, MenuIcon> iconMap = new HashMap<>();
-        for (final String key : icons.getKeys(false)) {
-            final ConfigurationSection section = icons.getConfigurationSection(key);
-            if (section == null) throw new NullPointerException("Icons must not be null");
-            final String source = section.getString("source", "self");
-            final List<Map<?, ?>> functions = section.getMapList("functions");
-            final ConfigurationSection itemSec = section.getConfigurationSection("item");
-            if (itemSec == null) throw new NullPointerException("Item must not be null");
-            final Map<String, Object> itemMap = new HashMap<>();
-            itemMap.put("name", itemSec.getString("name", null));
-            itemMap.put("material", itemSec.getString("material", "STONE"));
-            itemMap.put("lore", itemSec.getStringList("lore"));
-            itemMap.put("custom-model-data", itemSec.getInt("custom-model-data", 0));
-            itemMap.put("unbreakable", itemSec.getBoolean("unbreakable", false));
-            ConfigurationSection enchantments = itemSec.getConfigurationSection("enchantments");
-            final Map<String, Integer> enchMap = new HashMap<>();
-            if (enchantments != null) {
-                for (final String enchKey : enchantments.getKeys(false)) {
-                    final int level = enchantments.getInt(enchKey, 1);
-                    enchMap.put(enchKey, level);
-                }
-            }
-            itemMap.put("enchantments", enchMap);
-            itemMap.put("item-flags", itemSec.getStringList("item-flags"));
-            iconMap.put(key, new MenuIcon(source, itemMap, functions));
+    @SuppressWarnings("unchecked")
+    public static Menu loadMenu(String path) {
+        Menu menu = null;
+        try (final var reader = new FileReader(path, StandardCharsets.UTF_8)) {
+            final var menuMap = YamlUtil.loadAs(reader, Map.class);
+            final var title = TextUtil.color(((String) menuMap.get("title")));
+            final var size = (Integer) menuMap.get("size");
+            final var layouts = ((String) menuMap.get("layouts")).replace("\n", "");
+            final var icons = (Map<String, Object>) menuMap.get("icons");
+            menu = new Menu(title, size, null, layouts, icons);
+        } catch (IOException ignored) {
         }
-        return new Menu(TextUtil.color(title), size, layouts, iconMap);
-    }
-
-    /**
-     * <p>解析layout为map</p>
-     *
-     * @param layouts 需解析的字符串
-     * @return 解析后的map
-     */
-    public static List<Result> parseLayout(String layouts) {
-        final List<Result> layoutList = new ArrayList<>();
-        if (layouts.length() % 9 != 0) throw new NullPointerException("Inventory's size must not higher than 6 lines");
-        int i = 0;
-        final char[] charArray = layouts.toCharArray();
-        for (final char c : charArray) {
-            final String key = String.valueOf(c);
-            layoutList.add(new Result(key, i++));
-        }
-        if (i > 54) throw new NullPointerException("Inventory's size must not higher than 54, but you set " + i);
-        return layoutList;
-    }
-
-    /**
-     * <p>解析工具(</p>
-     *
-     * @param layouts 界面排版字符串
-     * @param icons   图标map
-     * @param tempMap 缓存用的map
-     * @param <T>     决定返回值
-     * @return 返回值为T的map
-     */
-    public static <T> Map<Integer, T> parse(String layouts, Map<String, MenuIcon> icons, Map<String, T> tempMap) {
-        final Map<Integer, T> map = new HashMap<>();
-        final List<Result> layout = parseLayout(layouts);
-        for (final String str : icons.keySet())
-            for (final Result result : layout) {
-                if (!result.str().equals(str)) continue;
-                map.put(result.slot(), tempMap.get(str));
-            }
-        return map;
+        return menu;
     }
 
     /**
@@ -119,37 +63,37 @@ public final class MenuAPI {
      *
      * @param layouts 排版字符串
      * @param icons   图标map
+     * @param uuid    玩家uuid
      * @return 数字和物品堆的map
      */
-    public static Map<Integer, ItemStack> parseToInv(String layouts, Map<String, MenuIcon> icons, UUID uuid) {
-        return parse(layouts, icons, parseIconsItem(uuid, icons));
-    }
-
-    /**
-     * <p>解析成数字与MenuIcon的map</p>
-     * <p>便于监听器调用</p>
-     *
-     * @param layouts 排版字符串
-     * @param icons   图标map
-     * @return 数字与MenuIcon的map
-     */
-    public static Map<Integer, MenuIcon> parseIconsChar(String layouts, Map<String, MenuIcon> icons) {
-        return parse(layouts, icons, icons);
-    }
-
-    /**
-     * <p>将图标对应字符解析为物品</p>
-     *
-     * @param icons 图标map
-     * @return 对应字符和物品堆的map
-     */
-    public static Map<String, ItemStack> parseIconsItem(UUID uuid, Map<String, MenuIcon> icons) {
-        final Map<String, ItemStack> itemMap = new HashMap<>();
-        for (final Map.Entry<String, MenuIcon> entry : icons.entrySet()) {
-            final String key = entry.getKey();
-            final MenuIcon icon = entry.getValue();
-            itemMap.put(key, icon.parseItem(uuid, icon.source()));
+    @SuppressWarnings("unchecked")
+    public static Map<Integer, Result> parseInv(String layouts, Map<String, Object> icons, UUID uuid) {
+        final Map<Integer, Result> map = new HashMap<>();
+        if (layouts.length() % 9 != 0) throw new NullPointerException("Inventory's size must not higher than 6 lines");
+        final var i = new AtomicInteger();
+        for (char c : layouts.toCharArray()) {
+            final var key = String.valueOf(c);
+            final var iconMap = (Map<String, Object>) icons.get(key);
+            final var source = (String) iconMap.get("source");
+            final var item = (Map<String, Object>) iconMap.get("item");
+            final var functions = (List<Map<String, ?>>) iconMap.get("functions");
+            final var menuIcon = new MenuIcon(source, item, functions);
+            final var parseItem = menuIcon.parseItem(uuid, source);
+            map.put(i.getAndIncrement(), new Result(key, parseItem, menuIcon));
         }
-        return itemMap;
+        if (i.get() > 54) throw new NullPointerException("Inventory's size must not higher than 54, but you set '" + i.get() + "'");
+        return map;
+    }
+
+    /**
+     * <p>获取map中的menuIcon</p>
+     *
+     * @param resultMap map
+     * @param slot      槽位id
+     * @return menuIcon
+     */
+    public static MenuIcon getMenuIcon(Map<Integer, Result> resultMap, Integer slot) {
+        var iconResult = resultMap.get(slot);
+        return iconResult.icon();
     }
 }

@@ -1,0 +1,20 @@
+close:
+  args: '/easymenu close 玩家 true/false'
+  permission: 'em.command.close'
+  notice: '&f为玩家关闭当前打开的界面, 并发送信息[false时不发送]'
+help:
+  args: '/easymenu help'
+  permission: 'em.command.help'
+  notice: '&f打开插件帮助'
+info:
+  args: '/easymenu info'
+  permission: 'em.command.info'
+  notice: '&f查看插件相关信息'
+open:
+  args: '/easymenu open 玩家 菜单 true/false'
+  permission: 'em.command.open'
+  notice: '&f为玩家打开一个菜单界面, 并发送信息[false时不发送]'
+reload:
+  args: '/easymenu reload'
+  permission: 'em.command.reload'
+  notice: '&f重载插件'

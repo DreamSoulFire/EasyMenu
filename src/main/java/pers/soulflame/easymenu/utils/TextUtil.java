@@ -5,13 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
-import pers.soulflame.easymenu.EasyMenu;
-import pers.soulflame.easymenu.api.FunctionAPI;
-import pers.soulflame.easymenu.api.SourceAPI;
-import pers.soulflame.easymenu.commands.MainCommand;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,32 +14,10 @@ import java.util.List;
 public final class TextUtil {
 
     public static String prefix;
+    public static String splitLine;
 
     private TextUtil() {
 
-    }
-
-    /**
-     * <p>插件启动信息</p>
-     */
-    public static void startInfo() {
-        final List<String> list = FileUtil.getLanguage().getStringList("plugin.start");
-        final PluginDescriptionFile description = EasyMenu.getInstance().getDescription();
-        final List<String> temp = new ArrayList<>(list.size());
-        for (final String line : list) {
-            temp.add(line.replace("<author>", description.getAuthors().toString())
-                    .replace("<version>", description.getVersion())
-                    .replace("<languages>", String.valueOf(FileUtil.getLangFiles().size()))
-                    .replace("<lang>", FileUtil.getLang())
-                    .replace("<menus>", String.valueOf(FileUtil.getMenuFiles().size()))
-                    .replace("<source>", String.valueOf(SourceAPI.getSources().size()))
-                    .replace("<sources>", SourceAPI.getSources().keySet().toString())
-                    .replace("<function>", String.valueOf(FunctionAPI.getFunctions().size()))
-                    .replace("<functions>", FunctionAPI.getFunctions().keySet().toString())
-                    .replace("<commands>", String.valueOf(MainCommand.getCommandMap().size()))
-            );
-        }
-        sendMessage(temp);
     }
 
     /**
@@ -54,7 +26,8 @@ public final class TextUtil {
      * @param message 需发送的信息
      */
     public static void sendMessage(String message) {
-        Bukkit.getConsoleSender().sendMessage(color(prefix + message));
+        final var sender = Bukkit.getConsoleSender();
+        sender.sendMessage(color(message.replace("<prefix>", prefix).replace("<split>", splitLine)));
     }
 
     /**
@@ -63,7 +36,7 @@ public final class TextUtil {
      * @param messages 需发送的信息
      */
     public static void sendMessage(List<String> messages) {
-        for (final String message : messages) sendMessage(message);
+        for (final var message : messages) sendMessage(message);
     }
 
     /**
@@ -74,9 +47,9 @@ public final class TextUtil {
      * @param message 单行信息字符串
      */
     public static void sendMessage(CommandSender sender, String message) {
-        if (sender instanceof Player )
-            message = PlaceholderAPI.setPlaceholders((Player) sender, message);
-        sender.sendMessage(color(prefix + message));
+        if (sender instanceof final Player player)
+            message = PlaceholderAPI.setPlaceholders(player, message);
+        sender.sendMessage(color(message.replace("<prefix>", prefix).replace("<split>", splitLine)));
     }
 
     /**
@@ -86,8 +59,7 @@ public final class TextUtil {
      * @param messages 信息集合
      */
     public static void sendMessage(CommandSender sender, List<String> messages) {
-        for (final String message : messages)
-            sendMessage(sender, message);
+        for (final var message : messages) sendMessage(sender, message);
     }
 
     /**
@@ -107,9 +79,7 @@ public final class TextUtil {
      * @return 解析后的文本
      */
     public static List<String> color(List<String> texts) {
-        final List<String> temp = new ArrayList<>(texts.size());
-        for (final String text : texts) temp.add(color(text));
-        return temp;
+        return texts.stream().map(TextUtil::color).toList();
     }
 
 }

@@ -25,6 +25,13 @@ public abstract class ItemSource {
         return key;
     }
 
+    /**
+     * <p>解析item为物品</p>
+     *
+     * @param uuid 玩家uuid
+     * @param map 配置中的物品map
+     * @return 物品堆
+     */
     protected abstract ItemStack parseItem(UUID uuid, Map<String, ?> map);
 
 }

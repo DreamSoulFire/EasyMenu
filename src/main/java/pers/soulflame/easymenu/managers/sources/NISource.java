@@ -3,7 +3,6 @@ package pers.soulflame.easymenu.managers.sources;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import pers.neige.neigeitems.item.ItemGenerator;
 import pers.neige.neigeitems.manager.ItemManager;
 import pers.soulflame.easymenu.managers.ItemSource;
 
@@ -27,12 +26,14 @@ public class NISource extends ItemSource {
     protected ItemStack parseItem(UUID uuid, Map<String, ?> map) {
         Player player = null;
         if (uuid != null) player = Bukkit.getPlayer(uuid);
-        final Object value = map.get("value");
+        final var value = map.get("value");
         if (value == null) throw new NullPointerException("Value must not be null");
-        final String id = (String) value;
-        final ItemGenerator item = ItemManager.INSTANCE.getItem(id);
+        final var id = (String) value;
+        final var item = ItemManager.INSTANCE.getItem(id);
         if (item == null) throw new NullPointerException("Item must not be null");
-        return uuid == null ? item.getItemStack(null, "") :
-                item.getItemStack(player, "");
+        var data = (String) map.get("data");
+        if (data == null) data = "";
+        return uuid == null ? item.getItemStack(null, data) :
+                item.getItemStack(player, data);
     }
 }

@@ -1,19 +1,21 @@
 package pers.soulflame.easymenu.api;
 
+import pers.soulflame.easymenu.EasyLoad;
 import pers.soulflame.easymenu.managers.ItemFunction;
+import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <p>物品功能相关api</p>
+ */
 public final class FunctionAPI {
 
     private FunctionAPI() {
 
     }
 
-    /**
-     * <p>获取所有物品功能</p>
-     */
     private static final Map<String, ItemFunction> sources = new HashMap<>();
 
     /**
@@ -22,8 +24,11 @@ public final class FunctionAPI {
      * @param function 子类
      */
     public static void addFunction(ItemFunction function) {
-        final Map<String, ItemFunction> functions = getFunctions();
+        final var functions = getFunctions();
         functions.put(function.getKey(), function);
+        final var add = EasyLoad.getPluginSec().getString("register.function",
+                "&7新增物品功能&f: &c<key>").replace("<key>", function.getKey());
+        TextUtil.sendMessage(add);
     }
 
     /**

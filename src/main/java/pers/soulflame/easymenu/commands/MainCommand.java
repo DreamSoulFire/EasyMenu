@@ -3,14 +3,10 @@ package pers.soulflame.easymenu.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pers.soulflame.easymenu.commands.subs.HelpCommand;
-import pers.soulflame.easymenu.commands.subs.InfoCommand;
-import pers.soulflame.easymenu.commands.subs.OpenCommand;
-import pers.soulflame.easymenu.commands.subs.ReloadCommand;
-import pers.soulflame.easymenu.utils.FileUtil;
+import pers.soulflame.easymenu.EasyLoad;
+import pers.soulflame.easymenu.commands.subs.*;
 import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.Arrays;
@@ -27,6 +23,7 @@ public class MainCommand implements TabExecutor {
     private static final Map<String, BaseCommand> commandMap = new HashMap<>();
 
     public MainCommand() {
+        registerCommand(new CloseCommand());
         registerCommand(new HelpCommand());
         registerCommand(new InfoCommand());
         registerCommand(new OpenCommand());
@@ -48,37 +45,44 @@ public class MainCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        YamlConfiguration language = FileUtil.getLanguage();
+        var section = EasyLoad.getCommandSec();
         if (args.length == 0) {
-            final List<String> help = language.getStringList("command.help");
-            TextUtil.sendMessage(sender, help);
+            final var header = section.getStringList("help.header");
+            TextUtil.sendMessage(sender, header);
+            final var commands = section.getStringList("help.commands");
+            EasyLoad.getCommandMap().values().forEach(cmd -> commands.stream()
+                    .map(s -> s.replace("<args>", cmd.args())
+                            .replace("<notice>", cmd.notice()))
+                    .forEach(s -> TextUtil.sendMessage(sender, s)));
+            final var footer = section.getStringList("help.footer");
+            TextUtil.sendMessage(sender, footer);
             return true;
         }
-        final BaseCommand manager = commandMap.get(args[0].toLowerCase());
+        final var manager = commandMap.get(args[0].toLowerCase());
         if (manager == null) {
-            final String noCommand = language.getString("command.no-such-command", "&c没有这个指令&f: &a<command>")
+            final var noCommand = section.getString("no-such-command", "<prefix>&c没有这个指令&f: &a<command>")
                     .replace("<command>", args[0]);
             TextUtil.sendMessage(sender, noCommand);
             return false;
         }
         if (!sender.hasPermission(manager.getPermission())) {
-            final String noPermission = language.getString("command.no-permission", "&c你没有权限&f: &6<permission>")
+            final var noPermission = section.getString("no-permission", "<prefix>&c你没有权限&f: &6<permission>")
                     .replace("<permission>", manager.getPermission());
             TextUtil.sendMessage(sender, noPermission);
             return false;
         }
         if (manager.getLength() > args.length) {
-            final String noArgs = language.getString("args-not-enough", "&c指令参数错误或不完整, 请检查是否输错了指令&f: &a<desc>")
-                    .replace("<desc>", manager.getCommandDesc());
-            TextUtil.sendMessage(sender, noArgs);
+            section.getStringList("args-not-enough").stream()
+                    .map(string -> string.replace("<desc>", manager.getCommandDesc()))
+                    .forEach(TextUtil::sendMessage);
             return false;
         }
-        final String[] strings = Arrays.copyOfRange(args, 1, args.length);
-        if (!(sender instanceof Player)) {
+        final var strings = Arrays.copyOfRange(args, 1, args.length);
+        if (!(sender instanceof Player player)) {
             manager.onConsoleCommand(sender, strings);
             return true;
         }
-        manager.onPlayerCommand((Player) sender, strings);
+        manager.onPlayerCommand(player, strings);
         return true;
     }
 

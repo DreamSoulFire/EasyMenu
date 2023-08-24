@@ -10,16 +10,8 @@ public class JSFunction extends ItemFunction {
         super(key);
     }
 
-    /**
-     * <p>执行js操作</p>
-     *
-     * @param uuid 玩家
-     * @param string js文本
-     * @return 是否执行成功
-     */
     @Override
     protected boolean run(UUID uuid, String string) {
-        ScriptUtil.eval(string);
-        return true;
+        return ScriptUtil.run(string, uuid);
     }
 }

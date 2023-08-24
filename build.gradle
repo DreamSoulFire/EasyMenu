@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'pers.soulflame'
-version = '1.0.4'
+version = '1.0.5'
 
 repositories {
     mavenCentral()
@@ -44,7 +44,7 @@ dependencies {
     compileOnly 'pers.neige.neigeitems:NeigeItems:+'
     compileOnly 'com.github.MilkBowl:VaultAPI:+'
     compileOnly 'org.black_ixx:playerpoints:+'
-    implementation 'org.openjdk.nashorn:nashorn-core:+'
+    compileOnly 'org.openjdk.nashorn:nashorn-core:+'
 }
 
 def targetJavaVersion = 17
@@ -56,9 +56,7 @@ java {
 }
 
 shadowJar {
-    relocate('org.objectweb.asm', 'easymenu.org.objectweb.asm')
-    relocate('org.openjdk.nashorn', 'easymenu.org.openjdk.nashorn')
-    archiveClassifier.set("active")
+    archiveClassifier.set("")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -84,5 +82,9 @@ processResources {
 }
 
 tasks.javadoc {
-    destinationDir(file("./docs"))
+    destinationDir(file('./docs'))
+}
+
+tasks.shadowJar {
+    destinationDirectory.set file('C:\\Users\\D_SoulFlame\\Desktop\\盘灵服务端\\paper\\plugins')
 }

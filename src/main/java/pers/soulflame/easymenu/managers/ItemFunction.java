@@ -19,6 +19,13 @@ public abstract class ItemFunction {
         return key;
     }
 
+    /**
+     * <p>执行物品功能</p>
+     *
+     * @param uuid 玩家的uuid
+     * @param string 执行的文本
+     * @return 是否执行成功
+     */
     protected abstract boolean run(UUID uuid, String string);
 
 }

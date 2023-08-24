@@ -3,8 +3,8 @@ package pers.soulflame.easymenu.commands.subs;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import pers.soulflame.easymenu.EasyLoad;
 import pers.soulflame.easymenu.commands.BaseCommand;
-import pers.soulflame.easymenu.utils.FileUtil;
 import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.List;
@@ -12,9 +12,17 @@ import java.util.List;
 public class ReloadCommand extends BaseCommand {
     @Override
     public void onConsoleCommand(CommandSender sender, String[] args) {
-        final String reload = FileUtil.getLanguage().getString("reload", "&a配置文件重载完成");
-        TextUtil.sendMessage(sender, reload);
-        FileUtil.loadAllFiles();
+        EasyLoad.init();
+        final var list = EasyLoad.getCommandSec().getStringList("reload");
+        for (final var line : list) {
+            if (line.startsWith("<console>")) {
+                TextUtil.sendMessage(line.substring(9));
+                continue;
+            }
+            TextUtil.sendMessage(line);
+            if (!(sender instanceof final Player player)) continue;
+            TextUtil.sendMessage(player, line);
+        }
     }
 
     @Override
@@ -23,13 +31,8 @@ public class ReloadCommand extends BaseCommand {
     }
 
     @Override
-    public String getPermission() {
-        return "em.command.reload";
-    }
-
-    @Override
-    public String getCommandDesc() {
-        return "/emenu reload";
+    public String getCommand() {
+        return "reload";
     }
 
     @Override

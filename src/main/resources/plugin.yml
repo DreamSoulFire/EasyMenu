@@ -2,13 +2,16 @@ name: EasyMenu
 version: '${version}'
 main: pers.soulflame.easymenu.EasyMenu
 api-version: '1.13'
-softdepend:
+depend:
   - 'PlaceholderAPI'
+softdepend:
   - 'NeigeItems'
   - 'Vault'
   - 'PlayerPoints'
 authors: [ SoulFlame ]
 description: 一款平平无奇的菜单插件
+libraries:
+  - org.openjdk.nashorn:nashorn-core:15.4
 commands:
   easymenu:
     aliases:
