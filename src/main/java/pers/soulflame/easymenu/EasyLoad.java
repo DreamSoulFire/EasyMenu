@@ -5,13 +5,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import pers.soulflame.easymenu.api.ConditionAPI;
 import pers.soulflame.easymenu.api.FunctionAPI;
 import pers.soulflame.easymenu.api.MenuAPI;
 import pers.soulflame.easymenu.api.SourceAPI;
+import pers.soulflame.easymenu.managers.ItemCondition;
 import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.managers.ItemSource;
 import pers.soulflame.easymenu.managers.Menu;
-import pers.soulflame.easymenu.managers.functions.*;
+import pers.soulflame.easymenu.managers.conditions.*;
+import pers.soulflame.easymenu.managers.functions.CatchFunction;
+import pers.soulflame.easymenu.managers.functions.CommandFunction;
+import pers.soulflame.easymenu.managers.functions.JSFunction;
 import pers.soulflame.easymenu.managers.sources.BaseSource;
 import pers.soulflame.easymenu.managers.sources.NISource;
 import pers.soulflame.easymenu.utils.FileUtil;
@@ -49,12 +54,18 @@ public final class EasyLoad {
         return economy;
     }
 
+    private static void createAndAdd(String name, Collection<File> scriptsFiles) {
+        FileUtil.createFile(folder, name);
+        scriptsFiles.add(FileUtil.getFile(name));
+    }
+
     /**
      * <p>重载插件</p>
      */
     public static void init() {
         config();
         languages();
+        scripts();
         commands();
         final var description = EasyMenu.getInstance().getDescription();
         pluginSec.getStringList("info").stream()
@@ -66,8 +77,9 @@ public final class EasyLoad {
                 .replace("<amount>", String.valueOf(langFiles.size()))
                 .replace("<lang>", lang)).forEach(TextUtil::sendMessage);
         menus();
-        sources();
+        conditions();
         functions();
+        sources();
     }
 
     private static final File folder = EasyMenu.getInstance().getDataFolder();
@@ -139,11 +151,7 @@ public final class EasyLoad {
      */
     public static void languages() {
         langFiles = FileUtil.getFiles(new File(folder, "languages"), true);
-        final var langName = "languages/zh_cn.yml";
-        if (langFiles.isEmpty()) {
-            FileUtil.createFile(folder, langName);
-            langFiles.add(FileUtil.getFile(langName));
-        }
+        if (langFiles.isEmpty()) createAndAdd("languages/zh_cn.yml", langFiles);
         final var file = new File(folder, "languages/" + lang + ".yml");
         if (!langFiles.contains(file)) {
             getLanguage().getStringList("plugin.cast-language-to-chinese").stream().map(s ->
@@ -172,14 +180,30 @@ public final class EasyLoad {
         return commandMap;
     }
 
+    /**
+     * <p>获取对应指令</p>
+     *
+     * @param command 指令的关键字
+     * @return 指令实例
+     */
     public static Command getCommand(String command) {
         return commandMap.get(command);
     }
 
+    /**
+     * <p>指令record类</p>
+     *
+     * @param args       指令字符
+     * @param permission 指令所需权限
+     * @param notice     指令提示
+     */
     public record Command(String args, String permission, String notice) {
 
     }
 
+    /**
+     * <p>加载指令</p>
+     */
     @SuppressWarnings("unchecked")
     public static void commands() {
         File file = new File(folder, "commands.yml");
@@ -215,20 +239,99 @@ public final class EasyLoad {
      */
     public static void menus() {
         TextUtil.sendMessage(getPluginSec().getStringList("menus.start"));
-        final var menuName = "menus/example.yml";
         Collection<File> menuFiles = FileUtil.getFiles(new File(folder, "menus"), true);
-        if (menuFiles.isEmpty()) {
-            FileUtil.createFile(folder, menuName);
-            menuFiles.add(FileUtil.getFile(menuName));
-        }
+        if (menuFiles.isEmpty()) createAndAdd("menus/example.yml", menuFiles);
         menus.putAll(menuFiles.stream().collect(Collectors.toMap(File::getName,
                 file -> MenuAPI.loadMenu(file.getPath()))));
         getPluginSec().getStringList("menus.finish").stream().map(string ->
                 string.replace("<amount>", String.valueOf(menus.size()))).forEach(TextUtil::sendMessage);
     }
 
+    /**
+     * <p>加载js文件夹</p>
+     */
+    public static void scripts() {
+        TextUtil.sendMessage(getPluginSec().getStringList("scripts.start"));
+        final var scriptsFiles = FileUtil.getFiles(new File(folder, "scripts"), true);
+        if (scriptsFiles.isEmpty()) {
+            createAndAdd("scripts/catch.js", scriptsFiles);
+            createAndAdd("scripts/check.js", scriptsFiles);
+            createAndAdd("scripts/condition.js", scriptsFiles);
+            createAndAdd("scripts/example.js", scriptsFiles);
+        }
+        scriptsFiles.forEach(file -> ScriptUtil.compile(file.getName()));
+        getPluginSec().getStringList("scripts.finish").stream().map(string ->
+                string.replace("<amount>", String.valueOf(scriptsFiles.size()))).forEach(TextUtil::sendMessage);
+    }
+
+    /**
+     * <p>检测是否有该插件</p>
+     *
+     * @param plugin 插件名
+     * @return 是否有
+     */
     public static boolean hasPlugin(String plugin) {
         return Bukkit.getPluginManager().getPlugin(plugin) != null;
+    }
+
+    /**
+     * <p>添加物品条件</p>
+     *
+     * @param condition 条件
+     */
+    public static void addCondition(ItemCondition condition) {
+        ConditionAPI.addCondition(condition);
+    }
+
+    /**
+     * <p>加载物品条件</p>
+     */
+    public static void conditions() {
+        TextUtil.sendMessage(getPluginSec().getStringList("conditions.start"));
+        ConditionAPI.getConditions().clear();
+        final var section = config.getConfigurationSection("conditions");
+        if (section == null) throw new NullPointerException("Section 'conditions' must not be null");
+        addCondition(new JSCondition(section.getString("java-script", "js")));
+        if (hasPlugin("Vault")) {
+            final var registration = Bukkit.getServicesManager().getRegistration(Economy.class);
+            if (registration != null) economy = registration.getProvider();
+            addCondition(new MoneyCondition(section.getString("vault", "money")));
+        }
+        if (hasPlugin("PlaceholderAPI"))
+            addCondition(new PAPICondition(section.getString("placeholderapi", "papi")));
+        addCondition(new PermissionCondition(section.getString("permission", "perm")));
+        if (hasPlugin("PlayerPoints"))
+            addCondition(new PointsCondition(section.getString("player-points", "points")));
+        getPluginSec().getStringList("conditions.finish").stream()
+                .map(string -> string.replace("<amount>",
+                        String.valueOf(ConditionAPI.getConditions().size())))
+                .forEach(TextUtil::sendMessage);
+    }
+
+    /**
+     * <p>添加物品功能</p>
+     *
+     * @param function 物品功能
+     */
+    public static void addFunction(ItemFunction function) {
+        FunctionAPI.addFunction(function);
+    }
+
+    /**
+     * <p>加载物品功能</p>
+     */
+    public static void functions() {
+        TextUtil.sendMessage(getPluginSec().getStringList("functions.start"));
+        FunctionAPI.getFunctions().clear();
+        final var section = config.getConfigurationSection("functions");
+        if (section == null) throw new NullPointerException("Section 'functions' must not be null");
+        addFunction(new CatchFunction(section.getString("catch", "catch")));
+        addFunction(new CommandFunction(section.getString("command", "command")));
+        addFunction(new JSFunction(section.getString("java-script", "js")));
+        getPluginSec().getStringList("functions.finish").stream()
+                .map(string -> string.replace("<amount>",
+                        String.valueOf(FunctionAPI.getFunctions().size())))
+                .forEach(TextUtil::sendMessage);
     }
 
     /**
@@ -253,42 +356,6 @@ public final class EasyLoad {
         getPluginSec().getStringList("sources.finish").stream()
                 .map(string -> string.replace("<amount>",
                         String.valueOf(SourceAPI.getSources().size())))
-                .forEach(TextUtil::sendMessage);
-    }
-
-    /**
-     * <p>添加物品功能</p>
-     *
-     * @param function 物品功能
-     */
-    public static void addFunction(ItemFunction function) {
-        FunctionAPI.addFunction(function);
-    }
-
-    /**
-     * <p>加载物品功能</p>
-     */
-    public static void functions() {
-        TextUtil.sendMessage(getPluginSec().getStringList("functions.start"));
-        FunctionAPI.getFunctions().clear();
-        final var section = config.getConfigurationSection("functions");
-        if (section == null) throw new NullPointerException("Section 'functions' must not be null");
-        addFunction(new CatchFunction(section.getString("catch", "catch")));
-        addFunction(new CommandFunction(section.getString("command", "command")));
-        addFunction(new JSFunction(section.getString("java-script", "js")));
-        addFunction(new PermissionFunction(section.getString("permission", "perm")));
-        if (hasPlugin("Vault")) {
-            final var registration = Bukkit.getServicesManager().getRegistration(Economy.class);
-            if (registration != null) economy = registration.getProvider();
-            addFunction(new MoneyFunction(section.getString("vault", "money")));
-        }
-        if (hasPlugin("PlaceholderAPI"))
-            addFunction(new PAPIFunction(section.getString("placeholderapi", "papi")));
-        if (hasPlugin("PlayerPoints"))
-            addFunction(new PointsFunction(section.getString("player-points", "points")));
-        getPluginSec().getStringList("functions.finish").stream()
-                .map(string -> string.replace("<amount>",
-                        String.valueOf(FunctionAPI.getFunctions().size())))
                 .forEach(TextUtil::sendMessage);
     }
 }

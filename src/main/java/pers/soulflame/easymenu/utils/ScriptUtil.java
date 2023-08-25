@@ -1,6 +1,5 @@
 package pers.soulflame.easymenu.utils;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,7 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import pers.soulflame.easymenu.api.MenuAPI;
 
-import javax.script.*;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public final class ScriptUtil {
@@ -26,7 +31,6 @@ public final class ScriptUtil {
         engine.put("ItemStack", ItemStack.class);
         engine.put("Material", Material.class);
         engine.put("MenuAPI", MenuAPI.class);
-        engine.put("Player", Player.class);
         engine.put("TextUtil", TextUtil.class);
     }
 
@@ -44,25 +48,12 @@ public final class ScriptUtil {
     /**
      * <p>用于条件判断</p>
      *
-     * @param script js脚本
-     * @param uuid   玩家uuid
+     * @param file js文件名
+     * @param uuid 玩家uuid
      * @return 返回值
      */
-    public static boolean run(String script, UUID uuid) {
-        final var player = Bukkit.getPlayer(uuid);
-        if (player == null) return false;
-        try {
-            var eval = eval(script, uuid);
-            if (script.startsWith("function")) {
-                final var invocable = (Invocable) getEngine();
-                script = script.substring(9, script.indexOf("("));
-                final var check = invocable.invokeFunction(script, player);
-                return parseBoolean(check);
-            }
-            return parseBoolean(eval);
-        } catch (ScriptException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+    public static boolean run(String file, UUID uuid) {
+        return parseBoolean(eval(file, uuid));
     }
 
     /**
@@ -80,15 +71,34 @@ public final class ScriptUtil {
     /**
      * <p>预编译js脚本</p>
      *
-     * @param script js脚本
+     * @param file js文件名
      * @return 编译后的js
      */
-    public static CompiledScript compile(String script) {
+    public static CompiledScript compile(String file) {
+        CompiledScript compiled = null;
+        final var compilable = (Compilable) getEngine();
+        try (final var reader = new FileReader(file, StandardCharsets.UTF_8)) {
+            final var script = YamlUtil.loadAs(reader, String.class);
+            compiled = compilable.compile(script);
+            compiledMap.put(file, compiled);
+        } catch (IOException ignored) {
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+        return compiled;
+    }
+
+    /**
+     * <p>执行js脚本</p>
+     *
+     * @param script js
+     * @return 返回值
+     */
+    public static boolean eval(String script, Player player) {
+        final var bindings = getEngine().createBindings();
+        bindings.put("player", player);
         try {
-            final var compilable = (Compilable) getEngine();
-            final var compiled = compilable.compile(script);
-            compiledMap.put(script, compiled);
-            return compiled;
+            return parseBoolean(getEngine().eval(script, bindings));
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }
@@ -97,17 +107,19 @@ public final class ScriptUtil {
     /**
      * <p>执行js脚本</p>
      *
-     * @param script 文本
+     * @param file js文件名
      * @return 返回值
      */
-    public static Object eval(String script, UUID uuid) {
+    public static Object eval(String file, UUID uuid) {
         final var player = Bukkit.getPlayer(uuid);
-        if (player != null)
-            script = PlaceholderAPI.setPlaceholders(player, script);
+        if (player == null) return null;
+        final var bindings = getEngine().createBindings();
+        bindings.put("player", player);
         try {
-            final var compiledScript = compiledMap.get(script);
-            if (compiledScript == null) return compile(script).eval();
-            return compiledScript.eval();
+            final var compiledScript = compiledMap.get(file);
+            if (compiledScript == null)
+                return compile(file).eval(bindings);
+            return compiledScript.eval(bindings);
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }

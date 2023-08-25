@@ -92,7 +92,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">说明</div>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="EasyLoad.Command.html" class="type-name-link" title="pers.soulflame.easymenu中的类">EasyLoad.Command</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">指令record类</div>
+</div>
 </div>
 </section>
 </li>
@@ -108,18 +110,30 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">方法</div>
 <div class="table-header col-last">说明</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#addFunction(pers.soulflame.easymenu.managers.ItemFunction)" class="member-name-link">addFunction</a><wbr>(<a href="managers/ItemFunction.html" title="pers.soulflame.easymenu.managers中的类">ItemFunction</a>&nbsp;function)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#addCondition(pers.soulflame.easymenu.managers.ItemCondition)" class="member-name-link">addCondition</a><wbr>(<a href="managers/ItemCondition.html" title="pers.soulflame.easymenu.managers中的类">ItemCondition</a>&nbsp;condition)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">添加物品功能</div>
+<div class="block">添加物品条件</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#addSource(pers.soulflame.easymenu.managers.ItemSource)" class="member-name-link">addSource</a><wbr>(<a href="managers/ItemSource.html" title="pers.soulflame.easymenu.managers中的类">ItemSource</a>&nbsp;source)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#addFunction(pers.soulflame.easymenu.managers.ItemFunction)" class="member-name-link">addFunction</a><wbr>(<a href="managers/ItemFunction.html" title="pers.soulflame.easymenu.managers中的类">ItemFunction</a>&nbsp;function)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">添加物品源</div>
+<div class="block">添加物品功能</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#commands()" class="member-name-link">commands</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#addSource(pers.soulflame.easymenu.managers.ItemSource)" class="member-name-link">addSource</a><wbr>(<a href="managers/ItemSource.html" title="pers.soulflame.easymenu.managers中的类">ItemSource</a>&nbsp;source)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">添加物品源</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#commands()" class="member-name-link">commands</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">加载指令</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#conditions()" class="member-name-link">conditions</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">加载物品条件</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#config()" class="member-name-link">config</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -132,7 +146,9 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="EasyLoad.Command.html" title="pers.soulflame.easymenu中的类">EasyLoad.Command</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getCommand(java.lang.String)" class="member-name-link">getCommand</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;command)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">获取对应指令</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="java.util中的类或接口" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>,<wbr><a href="EasyLoad.Command.html" title="pers.soulflame.easymenu中的类">EasyLoad.Command</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getCommandMap()" class="member-name-link">getCommandMap</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -165,7 +181,9 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#hasPlugin(java.lang.String)" class="member-name-link">hasPlugin</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;plugin)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">检测是否有该插件</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#init()" class="member-name-link">init</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -182,13 +200,18 @@ loadScripts(document, 'script');</script>
 <div class="block">加载菜单文件夹</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setLanguage(org.bukkit.configuration.file.YamlConfiguration)" class="member-name-link">setLanguage</a><wbr>(org.bukkit.configuration.file.YamlConfiguration&nbsp;language)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#scripts()" class="member-name-link">scripts</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">设置当前语言文件</div>
+<div class="block">加载js文件夹</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sources()" class="member-name-link">sources</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setLanguage(org.bukkit.configuration.file.YamlConfiguration)" class="member-name-link">setLanguage</a><wbr>(org.bukkit.configuration.file.YamlConfiguration&nbsp;language)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">设置当前语言文件</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sources()" class="member-name-link">sources</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">加载物品源</div>
 </div>
 </div>
@@ -299,12 +322,20 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getCommand(java.lang.String)">
 <h3>getCommand</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EasyLoad.Command.html" title="pers.soulflame.easymenu中的类">EasyLoad.Command</a></span>&nbsp;<span class="element-name">getCommand</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;command)</span></div>
+<div class="block"><p>获取对应指令</p></div>
+<dl class="notes">
+<dt>参数:</dt>
+<dd><code>command</code> - 指令的关键字</dd>
+<dt>返回:</dt>
+<dd>指令实例</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="commands()">
 <h3>commands</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">commands</span>()</div>
+<div class="block"><p>加载指令</p></div>
 </section>
 </li>
 <li>
@@ -326,27 +357,41 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="hasPlugin(java.lang.String)">
-<h3>hasPlugin</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasPlugin</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;plugin)</span></div>
+<section class="detail" id="scripts()">
+<h3>scripts</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">scripts</span>()</div>
+<div class="block"><p>加载js文件夹</p></div>
 </section>
 </li>
 <li>
-<section class="detail" id="addSource(pers.soulflame.easymenu.managers.ItemSource)">
-<h3>addSource</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addSource</span><wbr><span class="parameters">(<a href="managers/ItemSource.html" title="pers.soulflame.easymenu.managers中的类">ItemSource</a>&nbsp;source)</span></div>
-<div class="block"><p>添加物品源</p></div>
+<section class="detail" id="hasPlugin(java.lang.String)">
+<h3>hasPlugin</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasPlugin</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;plugin)</span></div>
+<div class="block"><p>检测是否有该插件</p></div>
 <dl class="notes">
 <dt>参数:</dt>
-<dd><code>source</code> - 物品源</dd>
+<dd><code>plugin</code> - 插件名</dd>
+<dt>返回:</dt>
+<dd>是否有</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="sources()">
-<h3>sources</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sources</span>()</div>
-<div class="block"><p>加载物品源</p></div>
+<section class="detail" id="addCondition(pers.soulflame.easymenu.managers.ItemCondition)">
+<h3>addCondition</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addCondition</span><wbr><span class="parameters">(<a href="managers/ItemCondition.html" title="pers.soulflame.easymenu.managers中的类">ItemCondition</a>&nbsp;condition)</span></div>
+<div class="block"><p>添加物品条件</p></div>
+<dl class="notes">
+<dt>参数:</dt>
+<dd><code>condition</code> - 条件</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="conditions()">
+<h3>conditions</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">conditions</span>()</div>
+<div class="block"><p>加载物品条件</p></div>
 </section>
 </li>
 <li>
@@ -365,6 +410,24 @@ loadScripts(document, 'script');</script>
 <h3>functions</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">functions</span>()</div>
 <div class="block"><p>加载物品功能</p></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addSource(pers.soulflame.easymenu.managers.ItemSource)">
+<h3>addSource</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addSource</span><wbr><span class="parameters">(<a href="managers/ItemSource.html" title="pers.soulflame.easymenu.managers中的类">ItemSource</a>&nbsp;source)</span></div>
+<div class="block"><p>添加物品源</p></div>
+<dl class="notes">
+<dt>参数:</dt>
+<dd><code>source</code> - 物品源</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="sources()">
+<h3>sources</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sources</span>()</div>
+<div class="block"><p>加载物品源</p></div>
 </section>
 </li>
 </ul>

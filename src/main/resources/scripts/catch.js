@@ -1,0 +1,1 @@
+TextUtil.static.sendMessage(player, "&a你的捕获值为&f: &e$catch");

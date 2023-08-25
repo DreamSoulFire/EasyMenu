@@ -4,6 +4,8 @@ pers.soulflame.easymenu.commands
 pers.soulflame.easymenu.commands.subs
 pers.soulflame.easymenu.listeners
 pers.soulflame.easymenu.managers
+pers.soulflame.easymenu.managers.conditions
 pers.soulflame.easymenu.managers.functions
 pers.soulflame.easymenu.managers.sources
+pers.soulflame.easymenu.metrics
 pers.soulflame.easymenu.utils

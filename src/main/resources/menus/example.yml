@@ -7,10 +7,11 @@ title: '&6一个测试用的菜单'
 # 菜单的大小
 # And the size
 size: 27
-options:
-  action: 'SHIFT+F'
-  condition: |-
-    !player.isFlying()
+# 打开菜单所需的条件
+# Condition of open this menu
+condition:
+  type: 'js'
+  value: 'condition'
 # 菜单的排版
 # Show style of menu
 layouts: |-
@@ -110,10 +111,11 @@ icons:
       - type: 'command'
         value: |-
           [player]: say Catch the $catch
-      - type: 'papi'
-        value: '"%player_name%" != "$catch"'
-      - type: 'js'
-        value: 'example-run'
+      - condition:
+          type: 'papi'
+          value: '"%player_name%" != "$catch"'
+        type: 'js'
+        value: 'catch'
   '%':
     source: 'self'
     item:
@@ -142,13 +144,16 @@ icons:
     functions:
       # 物品条件
       # Condition of item and should use javascript
-      - condition: 'example-check'
+      - condition:
+          type: 'js'
+          value: 'check'
         type: 'command'
         value: |-
           [player]: say &a我&b%player_level%&a辣!
-      - type: 'perm'
-        value: 'em.test.buy'
-      - type: 'command'
+      - condition:
+          type: 'perm'
+          value: 'em.test.buy'
+        type: 'command'
         value: |-
           [console]: say %player_name% &a获得了 &eXXX
   '&':
@@ -159,15 +164,16 @@ icons:
       lore:
         - '&7这是一个测试 papi 方法的小麦'
     functions:
-      # 检测papi变量
-      # Check the placeholderapi
-      - type: 'papi'
-        # 如果对比的是文字 请使用 " 将文字括起来
-        # 例如: "%player_name%" == 腐竹
-        # If comparing text, please use " surround
-        # For example: "%player_name%" == Host
-        value: '%player_level% >= 5'
-      - type: 'command'
+      - condition:
+          # 检测papi变量
+          # Check the placeholderapi
+          type: 'papi'
+          # 如果对比的是文字 请使用 " 将文字括起来
+          # 例如: "%player_name%" == 腐竹
+          # If comparing text, please use " surround
+          # For example: "%player_name%" == Host
+          value: '%player_level% >= 5'
+        type: 'command'
         value: |-
           [player]: say 成了
   '*':

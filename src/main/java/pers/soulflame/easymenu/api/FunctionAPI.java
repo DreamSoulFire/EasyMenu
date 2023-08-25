@@ -16,7 +16,7 @@ public final class FunctionAPI {
 
     }
 
-    private static final Map<String, ItemFunction> sources = new HashMap<>();
+    private static final Map<String, ItemFunction> functions = new HashMap<>();
 
     /**
      * <p>添加物品功能</p>
@@ -37,7 +37,7 @@ public final class FunctionAPI {
      * @return 物品功能列表
      */
     public static Map<String, ItemFunction> getFunctions() {
-        return sources;
+        return functions;
     }
 
     /**

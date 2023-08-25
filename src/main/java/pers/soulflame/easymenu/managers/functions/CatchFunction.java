@@ -17,7 +17,7 @@ public class CatchFunction extends ItemFunction {
     }
 
     @Override
-    protected boolean run(UUID uuid, String string) {
+    public boolean run(UUID uuid, String string) {
         final var player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
         TextUtil.sendMessage(player, string);

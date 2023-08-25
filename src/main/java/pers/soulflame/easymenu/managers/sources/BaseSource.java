@@ -30,7 +30,7 @@ public class BaseSource extends ItemSource {
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected ItemStack parseItem(UUID uuid, Map<String, ?> map) {
+    public ItemStack parseItem(UUID uuid, Map<String, ?> map) {
         Player player = null;
         if (uuid != null) player = Bukkit.getPlayer(uuid);
         if (map == null) throw new NullPointerException("The config of Item must not be null");

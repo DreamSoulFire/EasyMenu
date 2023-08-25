@@ -30,10 +30,6 @@ public class MainCommand implements TabExecutor {
         registerCommand(new ReloadCommand());
     }
 
-    public static Map<String, BaseCommand> getCommandMap() {
-        return commandMap;
-    }
-
     /**
      * 注册该指令
      *

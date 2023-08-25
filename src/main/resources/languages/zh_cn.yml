@@ -19,6 +19,26 @@ plugin:
       - '<prefix>&a语言文件夹加载完成'
       - '<prefix>&7加载了 &e<amount> &7个语言文件, 当前语言 &6<lang>'
       - ''
+  scripts:
+    start:
+      - '<prefix>&a开始加载js脚本文件夹...'
+    finish:
+      - '<prefix>&ajs脚本文件夹加载完成'
+      - '<prefix>&7加载了 &e<amount> &7个js'
+      - ''
+  menus:
+    start:
+      - '<prefix>&a开始加载菜单文件夹...'
+    finish:
+      - '<prefix>&a菜单文件夹加载完成'
+      - '<prefix>&7加载了 &e<amount> &7个菜单'
+      - ''
+  conditions:
+    start:
+      - '<prefix>&a开始加载物品条件...'
+    finish:
+      - '<prefix>&7物品条件加载完成, 当前有 &2<amount> &7种物品条件'
+      - ''
   sources:
     start:
       - '<prefix>&a开始加载物品源...'
@@ -30,13 +50,6 @@ plugin:
       - '<prefix>&a开始加载物品功能...'
     finish:
       - '<prefix>&7物品功能加载完成, 当前有 &c<amount> &7种物品功能'
-      - ''
-  menus:
-    start:
-      - '<prefix>&a开始加载菜单文件夹...'
-    finish:
-      - '<prefix>&a菜单文件夹加载完成'
-      - '<prefix>&7加载了 &e<amount> &7个菜单'
       - ''
   listeners:
     start:
@@ -60,6 +73,7 @@ plugin:
     - '<prefix>&7插件版本&f: &5<version>'
     - '<split>'
   register:
+    condition: '<prefix>&7新增物品条件&f: &2<key>'
     source: '<prefix>&7新增物品源&f: &b<key>'
     function: '<prefix>&7新增物品功能&f: &c<key>'
   points-not-enough: '<prefix>&c你的点券不足, 需要 &b<need>&c, 但你只有 &6%playerpoints_points%'
@@ -91,10 +105,12 @@ command:
     - '&a<desc>'
   info:
     - '<split>'
-    - '<prefix>&b当前物品源&f(<source>):'
-    - '&7<sources>'
+    - '<prefix>&b当前物品条件&f(<condition>):'
+    - '&7<conditions>'
     - '<prefix>&b当前物品功能&f(<function>):'
     - '&7<functions>'
+    - '<prefix>&b当前物品源&f(<source>):'
+    - '&7<sources>'
     - '<split>'
   open-for-other: '<prefix>&a你为 &b%player_name% &a打开了一个菜单'
   open-menu: '<prefix>&a你打开了一个菜单'

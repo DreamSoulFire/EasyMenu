@@ -15,7 +15,7 @@ public class CommandFunction extends ItemFunction {
     }
 
     @Override
-    protected boolean run(UUID uuid, String string) {
+    public boolean run(UUID uuid, String string) {
         final var player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
         final var split = PlaceholderAPI.setPlaceholders(player, TextUtil.color(string)).split("\n");

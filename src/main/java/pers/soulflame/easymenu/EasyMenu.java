@@ -1,16 +1,14 @@
 package pers.soulflame.easymenu;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import pers.soulflame.easymenu.commands.MainCommand;
 import pers.soulflame.easymenu.listeners.PlayerCatchListener;
 import pers.soulflame.easymenu.listeners.PlayerClickInvListener;
+import pers.soulflame.easymenu.metrics.Metrics;
 import pers.soulflame.easymenu.utils.TextUtil;
-
-import java.util.List;
 
 /**
  * <p>插件主类</p>
@@ -56,13 +54,13 @@ public final class EasyMenu extends JavaPlugin {
         TextUtil.sendMessage(section.getStringList("listeners.finish"));
 
         TextUtil.sendMessage(section.getStringList("commands.start"));
-        PluginCommand easymenu = getCommand("easymenu");
+        final var easymenu = getCommand("easymenu");
         if (easymenu != null) {
             easymenu.setExecutor(new MainCommand());
             easymenu.setTabCompleter(new MainCommand());
         }
-        List<String> command = section.getStringList("commands.finish").stream().map(string ->
-                string.replace("<amount>", String.valueOf(MainCommand.getCommandMap().size()))).toList();
+        final var command = section.getStringList("commands.finish").stream().map(string ->
+                string.replace("<amount>", String.valueOf(EasyLoad.getCommandMap().size()))).toList();
         TextUtil.sendMessage(command);
 
         TextUtil.sendMessage(section.getStringList("finish"));

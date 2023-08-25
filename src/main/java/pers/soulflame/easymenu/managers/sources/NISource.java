@@ -23,7 +23,7 @@ public class NISource extends ItemSource {
      * @return ni的物品
      */
     @Override
-    protected ItemStack parseItem(UUID uuid, Map<String, ?> map) {
+    public ItemStack parseItem(UUID uuid, Map<String, ?> map) {
         Player player = null;
         if (uuid != null) player = Bukkit.getPlayer(uuid);
         final var value = map.get("value");

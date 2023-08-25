@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pers.soulflame.easymenu.EasyLoad;
 import pers.soulflame.easymenu.EasyMenu;
+import pers.soulflame.easymenu.api.ConditionAPI;
 import pers.soulflame.easymenu.api.MenuAPI;
 import pers.soulflame.easymenu.commands.BaseCommand;
 import pers.soulflame.easymenu.utils.TextUtil;
@@ -34,6 +35,14 @@ public class OpenCommand extends BaseCommand {
             TextUtil.sendMessage(player, openMenu);
         }
         final var menu = EasyLoad.getMenus().get(args[1]);
+        final var condition = menu.condition();
+        var isOpen = false;
+        if (condition != null) {
+            final var type = condition.get("type").toString();
+            final var itemCondition = ConditionAPI.getCondition(type);
+            isOpen = itemCondition.check(player.getUniqueId(), (String) condition.get("value"));
+        }
+        if (!isOpen) return;
         menu.open(player);
         Bukkit.getScheduler().runTaskAsynchronously(EasyMenu.getInstance(), () -> {
             final var itemMap = MenuAPI.parseInv(menu.layouts(), menu.icons(), player.getUniqueId());

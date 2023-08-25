@@ -1,21 +1,21 @@
-package pers.soulflame.easymenu.managers.functions;
+package pers.soulflame.easymenu.managers.conditions;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
 import pers.soulflame.easymenu.EasyLoad;
-import pers.soulflame.easymenu.managers.ItemFunction;
+import pers.soulflame.easymenu.managers.ItemCondition;
 import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.UUID;
 
-public class PointsFunction extends ItemFunction {
-    public PointsFunction(String key) {
+public class PointsCondition extends ItemCondition {
+    public PointsCondition(String key) {
         super(key);
     }
 
     @Override
-    protected boolean run(UUID uuid, String string) {
+    public boolean check(UUID uuid, String string) {
         final var player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
         final var api = PlayerPoints.getInstance().getAPI();

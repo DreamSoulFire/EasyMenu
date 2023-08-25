@@ -1,22 +1,22 @@
-package pers.soulflame.easymenu.managers.functions;
+package pers.soulflame.easymenu.managers.conditions;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import pers.soulflame.easymenu.EasyLoad;
-import pers.soulflame.easymenu.managers.ItemFunction;
+import pers.soulflame.easymenu.managers.ItemCondition;
 import pers.soulflame.easymenu.utils.TextUtil;
 
 import java.util.UUID;
 
-public class MoneyFunction extends ItemFunction {
+public class MoneyCondition extends ItemCondition {
 
-    public MoneyFunction(String key) {
+    public MoneyCondition(String key) {
         super(key);
     }
 
     @Override
-    protected boolean run(UUID uuid, String string) {
+    public boolean check(UUID uuid, String string) {
         final var player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
         final var economy = (Economy) EasyLoad.getEconomy();

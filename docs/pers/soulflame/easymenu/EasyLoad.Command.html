@@ -77,12 +77,19 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>记录组件：</dt>
+<dd><code><span id="param-args">args</span></code> - 指令字符</dd>
+<dd><code><span id="param-permission">permission</span></code> - 指令所需权限</dd>
+<dd><code><span id="param-notice">notice</span></code> - 指令提示</dd>
+</dl>
+<dl class="notes">
 <dt>封闭类:</dt>
 <dd><a href="EasyLoad.html" title="pers.soulflame.easymenu中的类">EasyLoad</a></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">EasyLoad.Command</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;args, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;permission, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;notice)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="java.lang中的类或接口" class="external-link">Record</a></span></div>
+<div class="block"><p>指令record类</p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -117,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#args()" class="member-name-link">args</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 <code>args</code> 记录组件的值。</div>
+<div class="block">返回 <a href="#param-args"><code>args</code></a> 记录组件的值。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="java.lang中的类或接口" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -132,12 +139,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#notice()" class="member-name-link">notice</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 <code>notice</code> 记录组件的值。</div>
+<div class="block">返回 <a href="#param-notice"><code>notice</code></a> 记录组件的值。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permission()" class="member-name-link">permission</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 <code>permission</code> 记录组件的值。</div>
+<div class="block">返回 <a href="#param-permission"><code>permission</code></a> 记录组件的值。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -170,9 +177,9 @@ loadScripts(document, 'script');</script>
 <div class="block">创建 <code>Command</code> 记录的实例。</div>
 <dl class="notes">
 <dt>参数:</dt>
-<dd><code>args</code> - <code>args</code> 记录组件的值</dd>
-<dd><code>permission</code> - <code>permission</code> 记录组件的值</dd>
-<dd><code>notice</code> - <code>notice</code> 记录组件的值</dd>
+<dd><code>args</code> - <a href="#param-args"><code>args</code></a> 记录组件的值</dd>
+<dd><code>permission</code> - <a href="#param-permission"><code>permission</code></a> 记录组件的值</dd>
+<dd><code>notice</code> - <a href="#param-notice"><code>notice</code></a> 记录组件的值</dd>
 </dl>
 </section>
 </li>
@@ -229,10 +236,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="args()">
 <h3>args</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></span>&nbsp;<span class="element-name">args</span>()</div>
-<div class="block">返回 <code>args</code> 记录组件的值。</div>
+<div class="block">返回 <a href="#param-args"><code>args</code></a> 记录组件的值。</div>
 <dl class="notes">
 <dt>返回:</dt>
-<dd><code>args</code> 记录组件的值</dd>
+<dd><a href="#param-args"><code>args</code></a> 记录组件的值</dd>
 </dl>
 </section>
 </li>
@@ -240,10 +247,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="permission()">
 <h3>permission</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></span>&nbsp;<span class="element-name">permission</span>()</div>
-<div class="block">返回 <code>permission</code> 记录组件的值。</div>
+<div class="block">返回 <a href="#param-permission"><code>permission</code></a> 记录组件的值。</div>
 <dl class="notes">
 <dt>返回:</dt>
-<dd><code>permission</code> 记录组件的值</dd>
+<dd><a href="#param-permission"><code>permission</code></a> 记录组件的值</dd>
 </dl>
 </section>
 </li>
@@ -251,10 +258,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="notice()">
 <h3>notice</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></span>&nbsp;<span class="element-name">notice</span>()</div>
-<div class="block">返回 <code>notice</code> 记录组件的值。</div>
+<div class="block">返回 <a href="#param-notice"><code>notice</code></a> 记录组件的值。</div>
 <dl class="notes">
 <dt>返回:</dt>
-<dd><code>notice</code> 记录组件的值</dd>
+<dd><a href="#param-notice"><code>notice</code></a> 记录组件的值</dd>
 </dl>
 </section>
 </li>

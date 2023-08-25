@@ -2,6 +2,7 @@ package pers.soulflame.easymenu.managers;
 
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import pers.soulflame.easymenu.api.ConditionAPI;
 import pers.soulflame.easymenu.api.FunctionAPI;
 import pers.soulflame.easymenu.api.SourceAPI;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
@@ -46,6 +47,7 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<String, ?>> 
      *
      * @param uuid 需执行的玩家
      */
+    @SuppressWarnings("unchecked")
     public void runFunctions(UUID uuid, ClickType clickType) {
         if (functions == null || functions.isEmpty()) return;
         var isContent = true;
@@ -56,9 +58,12 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<String, ?>> 
                 ClickType type = ClickType.valueOf(click.toUpperCase());
                 if (!type.equals(clickType)) continue;
             }
-            final var condition = function.get("condition");
+            final var condition = (Map<String, Object>) function.get("condition");
             if (condition != null) {
-                isContent = ScriptUtil.run((String) condition, uuid);
+                final var type = condition.get("type");
+                if (type == null) continue;
+                final var itemCondition = ConditionAPI.getCondition((String) type);
+                isContent = itemCondition.check(uuid, (String) condition.get("value"));
             }
             if (!isContent) continue;
             final var type = function.get("type");
@@ -67,9 +72,8 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<String, ?>> 
             if (itemFunction == null) continue;
             final var yaml = FileUtil.getYaml("config.yml");
             final var aCatch = yaml.getString("functions.catch", "catch");
-            if (itemFunction.getKey().equals(aCatch)) {
+            if (itemFunction.getKey().equals(aCatch))
                 i.set(functions.indexOf(function));
-            }
             final var value = function.get("value");
             if (value == null) continue;
             if (!itemFunction.run(uuid, (String) value)) break;

@@ -50,9 +50,10 @@ public final class MenuAPI {
             final var menuMap = YamlUtil.loadAs(reader, Map.class);
             final var title = TextUtil.color(((String) menuMap.get("title")));
             final var size = (Integer) menuMap.get("size");
+            final var options = (Map<String, Object>) menuMap.get("condition");
             final var layouts = ((String) menuMap.get("layouts")).replace("\n", "");
             final var icons = (Map<String, Object>) menuMap.get("icons");
-            menu = new Menu(title, size, null, layouts, icons);
+            menu = new Menu(title, size, options, layouts, icons);
         } catch (IOException ignored) {
         }
         return menu;

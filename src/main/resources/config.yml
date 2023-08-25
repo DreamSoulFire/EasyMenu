@@ -2,16 +2,19 @@
 # Change the language of EasyMenu
 language: 'zh_cn'
 
+conditions:
+  java-script: 'js'
+  permission: 'perm'
+  placeholderapi: 'papi'
+#  vault: 'money'
+#  player-points: 'points'
+
 # 修改物品功能内部注册名
 # Change item function's key
 functions:
   catch: 'catch'
   command: 'command'
   java-script: 'js'
-  permission: 'perm'
-  placeholderapi: 'papi'
-#  vault: 'money'
-#  player-points: 'points'
 
 # 修改物品源内部注册名
 # Change item source's key

@@ -11,7 +11,7 @@ public class JSFunction extends ItemFunction {
     }
 
     @Override
-    protected boolean run(UUID uuid, String string) {
+    public boolean run(UUID uuid, String string) {
         return ScriptUtil.run(string, uuid);
     }
 }
