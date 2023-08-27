@@ -1,9 +1,11 @@
 package pers.soulflame.easymenu.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import pers.soulflame.easymenu.EasyMenu;
 import pers.soulflame.easymenu.api.MenuAPI;
 import pers.soulflame.easymenu.managers.Menu;
 
@@ -31,7 +33,8 @@ public class PlayerClickInvListener implements Listener {
         final var icon = MenuAPI.getMenuIcon(resultMap, rawSlot);
         if (icon == null) return;
         final var click = event.getClick();
-        icon.runFunctions(player.getUniqueId(), click);
+        Bukkit.getScheduler().runTaskAsynchronously(EasyMenu.getInstance(),
+                () -> icon.runFunctions(player.getUniqueId(), click));
     }
 
 }

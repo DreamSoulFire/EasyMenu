@@ -1,54 +1,40 @@
 # 这只是一个例子
-# This is a so easy example
 
 # 菜单的标题
-# Title of this menu
 title: '&6一个测试用的菜单'
 # 菜单的大小
-# And the size
 size: 27
 # 打开菜单所需的条件
-# Condition of open this menu
 condition:
   type: 'js'
   value: 'condition'
 # 菜单的排版
-# Show style of menu
 layouts: |-
   #########
   #!@$%^&*#
   #########
 # 菜单上的图标
-# Items on the menu
 icons:
   #  适配NeigeItems物品库的写法
-  #  Fit plugin NeigeItems
   #  '~':
   #    source: 'ni'
   #    item:
   #      value: '测试物品'
-  #      data: '{"配置":"极品"}'
+  #      data: '{"品质":"极品"}'
   # 物品的识别字符
-  # Key of single item
   '#':
     # 物品源
-    # Source of this item
     source: 'self'
     # 挡板物品设置
-    # Setting th frame of this menu
     item:
       # 名称
-      # Item's name
       name: '&7测试用'
       # 材质
-      # Material
       material: 'WHITE_STAINED_GLASS_PANE'
       # 描述
-      # Lore
       lore:
         - '&7这是一个测试普通物品生成的玻璃板'
   # 在这之后将只会注释与上面不一致的地方
-  # After I just show differents of others
   '!':
     source: 'self'
     item:
@@ -57,44 +43,37 @@ icons:
       lore:
         - '&7这是一个测试 command 方法的苹果'
     # 物品功能
-    # Functions after click the item
     functions:
       # 判断点击的类型
-      # Type of click this item
       - click: 'left'
         # 功能的类型
-        # Type of this function
         # command
         # 执行指令
-        # To execute commands of value
         type: 'command'
         # 执行的东西
-        # Execute value
         value: |-
           [console]: say Just to test
   '@':
     source: 'self'
     item:
-      # 自定义custom-model-data
-      # Customize custom-model-data of item
-      custom-model-data: 10001
-      name: '&a测试用'
-      material: 'CARROT_ON_A_STICK'
-      lore:
-        - '&7这是一个测试复杂物品生成的胡萝卜钓竿'
-      # 物品隐藏
-      # Hide flags of item
-      item-flags:
-        - 'HIDE_ATTRIBUTES'
-      # 无限耐久
-      # Setting unbreakable
-      unbreakable: true
-      # 附魔
-      # The enchantment
-      enchantments:
-        # 名称: 等级
-        # name: level
-        SHARPNESS: 2
+      - condition:
+          type: ''
+          value: ''
+        # 自定义custom-model-data
+        custom-model-data: 10001
+        name: '&a测试用'
+        material: 'CARROT_ON_A_STICK'
+        lore:
+          - '&7这是一个测试复杂物品生成的胡萝卜钓竿'
+        # 物品隐藏
+        item-flags:
+          - 'HIDE_ATTRIBUTES'
+        # 无限耐久
+        unbreakable: true
+        # 附魔
+        enchantments:
+          # 名称: 等级
+          SHARPNESS: 2
   '$':
     source: 'self'
     item:
@@ -104,8 +83,6 @@ icons:
         - '&7这是一个测试 catch 方法的黏土球'
     functions:
       # 捕获下一次聊天信息并传递到物品功能中
-      # Catch the chat info after click this item
-      # And transfer to other functions
       - type: 'catch'
         value: '&7[&fExample&7] &6请在聊天框输入XXX'
       - type: 'command'
@@ -125,11 +102,8 @@ icons:
         - '&7这是一个测试 js 方法的钻石'
     functions:
       # js脚本
-      # Use the java-script
       - type: 'js'
         # 如果没有返回值 则不会往后执行功能
-        # If there is no return value,
-        # the function will not be executed later
         value: 'example'
       - type: 'command'
         value: |-
@@ -143,7 +117,6 @@ icons:
         - '&7这是一个测试 condition 的红石'
     functions:
       # 物品条件
-      # Condition of item and should use javascript
       - condition:
           type: 'js'
           value: 'check'
@@ -166,12 +139,9 @@ icons:
     functions:
       - condition:
           # 检测papi变量
-          # Check the placeholderapi
           type: 'papi'
           # 如果对比的是文字 请使用 " 将文字括起来
           # 例如: "%player_name%" == 腐竹
-          # If comparing text, please use " surround
-          # For example: "%player_name%" == Host
           value: '%player_level% >= 5'
         type: 'command'
         value: |-
@@ -182,7 +152,6 @@ icons:
       name: '&a测试用'
       material: 'WHEAT_SEEDS'
       # 解析papi变量
-      # Parse placeholderapi on item's lore
       lore:
         - '&7这是一个测试 papi 解析的小麦种子'
         - '&7你当前的等级&f: &b%player_level%'

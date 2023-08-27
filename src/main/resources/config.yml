@@ -1,5 +1,4 @@
 # 修改语言文件
-# Change the language of EasyMenu
 language: 'zh_cn'
 
 conditions:
@@ -10,22 +9,18 @@ conditions:
 #  player-points: 'points'
 
 # 修改物品功能内部注册名
-# Change item function's key
 functions:
   catch: 'catch'
   command: 'command'
   java-script: 'js'
 
 # 修改物品源内部注册名
-# Change item source's key
 sources:
   easy-menu: 'self'
 #  neige-items: 'ni'
 
 # 自定义js工具类
-# Customize the tools of java-script
 # 想要彻底刷新工具只能重启服务器
-# To completely refresh the tool
-# you can only restart the server
+# 插件自带papi 可以不用自己导入
 script-tools:
-  PlaceholderAPI: "me.clip.placeholderapi.PlaceholderAPI"
+#  PlaceholderAPI: "me.clip.placeholderapi.PlaceholderAPI"

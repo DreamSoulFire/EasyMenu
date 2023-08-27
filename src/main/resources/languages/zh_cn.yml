@@ -1,9 +1,6 @@
 # prefix为全局 使用 <prefix> 来获取
-# Prefix is a global string
-# you should use <prefix> to get this
 prefix: '&7[&aEasy&6Menu&7] '
 # split-line也是全局 使用 <split>
-# Split-line also and use <split>
 split-line: '&6&m                                                                '
 plugin:
   info:

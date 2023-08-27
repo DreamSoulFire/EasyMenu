@@ -7,9 +7,11 @@ import pers.soulflame.easymenu.api.FunctionAPI;
 import pers.soulflame.easymenu.api.SourceAPI;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
 import pers.soulflame.easymenu.utils.FileUtil;
-import pers.soulflame.easymenu.utils.ScriptUtil;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public record MenuIcon(String source, Map<String, ?> item, List<Map<String, ?>> functions) {
@@ -88,6 +90,7 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<String, ?>> 
      *
      * @param uuid 玩家
      */
+    @SuppressWarnings("unchecked")
     public static void runAfterCatch(UUID uuid) {
         final var result = tempMap.get(uuid);
         if (result == null) return;
@@ -100,9 +103,12 @@ public record MenuIcon(String source, Map<String, ?> item, List<Map<String, ?>> 
                 ClickType type = ClickType.valueOf(click.toUpperCase());
                 if (!type.equals(result.clickType())) continue;
             }
-            final var condition = function.get("condition");
+            final var condition = (Map<String, Object>) function.get("condition");
             if (condition != null) {
-                isContent = ScriptUtil.run((String) condition, uuid);
+                final var type = condition.get("type");
+                if (type == null) continue;
+                final var itemCondition = ConditionAPI.getCondition((String) type);
+                isContent = itemCondition.check(uuid, (String) condition.get("value"));
             }
             if (!isContent) continue;
             final var type = function.get("type");

@@ -1,8 +1,8 @@
 package pers.soulflame.easymenu.utils;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import pers.soulflame.easymenu.api.MenuAPI;
@@ -11,9 +11,6 @@ import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public final class ScriptUtil {
@@ -31,6 +28,7 @@ public final class ScriptUtil {
         engine.put("ItemStack", ItemStack.class);
         engine.put("Material", Material.class);
         engine.put("MenuAPI", MenuAPI.class);
+        engine.put("PlaceholderAPI", PlaceholderAPI.class);
         engine.put("TextUtil", TextUtil.class);
     }
 
@@ -43,17 +41,6 @@ public final class ScriptUtil {
      */
     public static ScriptEngine getEngine() {
         return engine;
-    }
-
-    /**
-     * <p>用于条件判断</p>
-     *
-     * @param file js文件名
-     * @param uuid 玩家uuid
-     * @return 返回值
-     */
-    public static boolean run(String file, UUID uuid) {
-        return parseBoolean(eval(file, uuid));
     }
 
     /**
@@ -71,17 +58,15 @@ public final class ScriptUtil {
     /**
      * <p>预编译js脚本</p>
      *
-     * @param file js文件名
+     * @param script js
      * @return 编译后的js
      */
-    public static CompiledScript compile(String file) {
-        CompiledScript compiled = null;
+    public static CompiledScript compile(String script) {
+        CompiledScript compiled;
         final var compilable = (Compilable) getEngine();
-        try (final var reader = new FileReader(file, StandardCharsets.UTF_8)) {
-            final var script = YamlUtil.loadAs(reader, String.class);
+        try {
             compiled = compilable.compile(script);
-            compiledMap.put(file, compiled);
-        } catch (IOException ignored) {
+            compiledMap.put(script, compiled);
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }
@@ -94,32 +79,16 @@ public final class ScriptUtil {
      * @param script js
      * @return 返回值
      */
-    public static boolean eval(String script, Player player) {
-        final var bindings = getEngine().createBindings();
-        bindings.put("player", player);
-        try {
-            return parseBoolean(getEngine().eval(script, bindings));
-        } catch (ScriptException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * <p>执行js脚本</p>
-     *
-     * @param file js文件名
-     * @return 返回值
-     */
-    public static Object eval(String file, UUID uuid) {
+    public static boolean eval(String script, UUID uuid) {
         final var player = Bukkit.getPlayer(uuid);
-        if (player == null) return null;
+        if (player == null) return false;
         final var bindings = getEngine().createBindings();
         bindings.put("player", player);
         try {
-            final var compiledScript = compiledMap.get(file);
+            final var compiledScript = compiledMap.get(script);
             if (compiledScript == null)
-                return compile(file).eval(bindings);
-            return compiledScript.eval(bindings);
+                return parseBoolean(compile(script).eval(bindings));
+            return parseBoolean(compiledScript.eval(bindings));
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }

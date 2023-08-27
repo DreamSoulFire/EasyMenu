@@ -259,7 +259,12 @@ public final class EasyLoad {
             createAndAdd("scripts/condition.js", scriptsFiles);
             createAndAdd("scripts/example.js", scriptsFiles);
         }
-        scriptsFiles.forEach(file -> ScriptUtil.compile(file.getName()));
+        scriptsFiles.forEach(file -> {
+            try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
+                ScriptUtil.compile(YamlUtil.loadAs(reader, String.class));
+            } catch (IOException ignored) {
+            }
+        });
         getPluginSec().getStringList("scripts.finish").stream().map(string ->
                 string.replace("<amount>", String.valueOf(scriptsFiles.size()))).forEach(TextUtil::sendMessage);
     }

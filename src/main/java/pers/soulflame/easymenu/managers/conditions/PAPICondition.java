@@ -1,6 +1,5 @@
 package pers.soulflame.easymenu.managers.conditions;
 
-import org.bukkit.Bukkit;
 import pers.soulflame.easymenu.managers.ItemCondition;
 import pers.soulflame.easymenu.utils.ScriptUtil;
 
@@ -13,8 +12,6 @@ public class PAPICondition extends ItemCondition {
 
     @Override
     public boolean check(UUID uuid, String string) {
-        final var player = Bukkit.getPlayer(uuid);
-        if (player == null) return false;
-        return ScriptUtil.eval(string, player);
+        return ScriptUtil.eval(string, uuid);
     }
 }
