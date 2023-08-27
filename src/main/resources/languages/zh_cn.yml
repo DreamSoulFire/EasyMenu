@@ -70,12 +70,13 @@ plugin:
     - '<prefix>&7插件版本&f: &5<version>'
     - '<split>'
   register:
-    condition: '<prefix>&7新增物品条件&f: &2<key>'
+    condition: '<prefix>&7新增物品条件&f: &e<key>'
     source: '<prefix>&7新增物品源&f: &b<key>'
     function: '<prefix>&7新增物品功能&f: &c<key>'
   points-not-enough: '<prefix>&c你的点券不足, 需要 &b<need>&c, 但你只有 &6%playerpoints_points%'
   money-not-enough: '<prefix>&c你的金币不足, 需要 &b<need>&c, 但你只有 &6%vault_eco_balance_fixed%'
   error-command-execute: '<prefix>&c错误的指令行&f: &4<command>'
+  menu-condition-not-enough: '<prefix>&c开启此菜单的条件未满足, 打开失败'
   cast-language-to-chinese:
     - '<split>'
     - '&c未检测到语言文件 &a<lang>.yml, &c自动切换为 &ezh_cn'

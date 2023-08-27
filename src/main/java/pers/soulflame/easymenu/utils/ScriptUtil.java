@@ -7,30 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import pers.soulflame.easymenu.api.MenuAPI;
 
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.util.*;
 
 public final class ScriptUtil {
 
     private static final ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine();
-
-    static {
-        engine.put("ArrayList", ArrayList.class);
-        engine.put("Arrays", Arrays.class);
-        engine.put("List", List.class);
-        engine.put("Map", Map.class);
-        engine.put("Math", Math.class);
-        engine.put("String", String.class);
-        engine.put("Bukkit", Bukkit.class);
-        engine.put("ItemStack", ItemStack.class);
-        engine.put("Material", Material.class);
-        engine.put("MenuAPI", MenuAPI.class);
-        engine.put("PlaceholderAPI", PlaceholderAPI.class);
-        engine.put("TextUtil", TextUtil.class);
-    }
 
     private static final Map<String, CompiledScript> compiledMap = new HashMap<>();
 
@@ -82,8 +64,10 @@ public final class ScriptUtil {
     public static boolean eval(String script, UUID uuid) {
         final var player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
+        script = PlaceholderAPI.setPlaceholders(player, script);
         final var bindings = getEngine().createBindings();
         bindings.put("player", player);
+        putBindings(bindings);
         try {
             final var compiledScript = compiledMap.get(script);
             if (compiledScript == null)
@@ -92,6 +76,27 @@ public final class ScriptUtil {
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * <p>导入工具类</p>
+     *
+     * @param bindings 需导入的bindings
+     */
+    private static void putBindings(Bindings bindings) {
+        bindings.put("ArrayList", ArrayList.class);
+        bindings.put("Arrays", Arrays.class);
+        bindings.put("List", List.class);
+        bindings.put("Map", Map.class);
+        bindings.put("Math", Math.class);
+        bindings.put("String", String.class);
+        bindings.put("Integer", Integer.class);
+        bindings.put("Bukkit", Bukkit.class);
+        bindings.put("ItemStack", ItemStack.class);
+        bindings.put("Material", Material.class);
+        bindings.put("MenuAPI", MenuAPI.class);
+        bindings.put("PlaceholderAPI", PlaceholderAPI.class);
+        bindings.put("TextUtil", TextUtil.class);
     }
 
 }

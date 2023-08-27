@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,9 +55,9 @@ public final class EasyLoad {
         return economy;
     }
 
-    private static void createAndAdd(String name, Collection<File> scriptsFiles) {
+    private static void createAndAdd(String name, Collection<File> files) {
         FileUtil.createFile(folder, name);
-        scriptsFiles.add(FileUtil.getFile(name));
+        files.add(FileUtil.getFile(name));
     }
 
     /**
@@ -65,8 +66,6 @@ public final class EasyLoad {
     public static void init() {
         config();
         languages();
-        scripts();
-        commands();
         final var description = EasyMenu.getInstance().getDescription();
         pluginSec.getStringList("info").stream()
                 .map(string -> string.replace("<author>", description.getAuthors().toString())
@@ -76,6 +75,8 @@ public final class EasyLoad {
         pluginSec.getStringList("languages.finish").stream().map(string -> string
                 .replace("<amount>", String.valueOf(langFiles.size()))
                 .replace("<lang>", lang)).forEach(TextUtil::sendMessage);
+        scripts();
+        commands();
         menus();
         conditions();
         functions();
@@ -260,9 +261,10 @@ public final class EasyLoad {
             createAndAdd("scripts/example.js", scriptsFiles);
         }
         scriptsFiles.forEach(file -> {
-            try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
-                ScriptUtil.compile(YamlUtil.loadAs(reader, String.class));
-            } catch (IOException ignored) {
+            try {
+                ScriptUtil.compile(Files.readString(file.toPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
         getPluginSec().getStringList("scripts.finish").stream().map(string ->

@@ -1,6 +1,7 @@
 package pers.soulflame.easymenu.managers.functions;
 
 import org.bukkit.Bukkit;
+import pers.soulflame.easymenu.EasyMenu;
 import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.utils.TextUtil;
 
@@ -22,7 +23,7 @@ public class CatchFunction extends ItemFunction {
         if (player == null) return false;
         TextUtil.sendMessage(player, string);
         catches.add(uuid);
-        player.closeInventory();
+        Bukkit.getScheduler().runTask(EasyMenu.getInstance(), player::closeInventory);
         return true;
     }
 }

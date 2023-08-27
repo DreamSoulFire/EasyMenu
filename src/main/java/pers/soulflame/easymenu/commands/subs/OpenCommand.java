@@ -22,7 +22,7 @@ public class OpenCommand extends BaseCommand {
         if (section == null) throw new NullPointerException("The section 'command' in language file must not be null");
         if (player == null) {
             final var offline = section.getString("player-offline",
-                    "<prefix>&c玩家 &6%player_name% &c不存在或离线")
+                            "<prefix>&c玩家 &6%player_name% &c不存在或离线")
                     .replace("%player_name%", args[0]);
             TextUtil.sendMessage(sender, offline);
             return;
@@ -40,9 +40,15 @@ public class OpenCommand extends BaseCommand {
         if (condition != null) {
             final var type = condition.get("type").toString();
             final var itemCondition = ConditionAPI.getCondition(type);
-            isOpen = itemCondition.check(player.getUniqueId(), (String) condition.get("value"));
+            final var value = (String) condition.get("value");
+            isOpen = itemCondition.check(player.getUniqueId(), value);
         }
-        if (!isOpen) return;
+        if (!isOpen) {
+            final var msg = EasyLoad.getPluginSec().getString("menu-condition-not-enough",
+                    "<prefix>&c开启此菜单的条件未满足, 打开失败");
+            TextUtil.sendMessage(player, msg);
+            return;
+        }
         menu.open(player);
         Bukkit.getScheduler().runTaskAsynchronously(EasyMenu.getInstance(), () -> {
             final var itemMap = MenuAPI.parseInv(menu.layouts(), menu.icons(), player.getUniqueId());

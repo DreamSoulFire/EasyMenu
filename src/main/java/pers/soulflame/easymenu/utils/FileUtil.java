@@ -39,7 +39,7 @@ public final class FileUtil {
     public static void createFile(File folder, String name) {
         final var file = new File(folder, name);
         if (!file.exists()) EasyMenu.getInstance().saveResource(name, false);
-        final var yaml = YamlConfiguration.loadConfiguration(file);
+        var yaml = name.endsWith(".js") ? null : YamlConfiguration.loadConfiguration(file);
         final var value = new Result(file, yaml);
         fileMap.put(name, value);
     }

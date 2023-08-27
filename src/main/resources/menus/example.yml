@@ -56,24 +56,21 @@ icons:
   '@':
     source: 'self'
     item:
-      - condition:
-          type: ''
-          value: ''
-        # 自定义custom-model-data
-        custom-model-data: 10001
-        name: '&a测试用'
-        material: 'CARROT_ON_A_STICK'
-        lore:
-          - '&7这是一个测试复杂物品生成的胡萝卜钓竿'
-        # 物品隐藏
-        item-flags:
-          - 'HIDE_ATTRIBUTES'
-        # 无限耐久
-        unbreakable: true
-        # 附魔
-        enchantments:
-          # 名称: 等级
-          SHARPNESS: 2
+      # 自定义custom-model-data
+      custom-model-data: 10001
+      name: '&a测试用'
+      material: 'CARROT_ON_A_STICK'
+      lore:
+        - '&7这是一个测试复杂物品生成的胡萝卜钓竿'
+      # 物品隐藏
+      item-flags:
+        - 'HIDE_ATTRIBUTES'
+      # 无限耐久
+      unbreakable: true
+      # 附魔
+      enchantments:
+        # 名称: 等级
+        SHARPNESS: 2
   '$':
     source: 'self'
     item:
@@ -122,7 +119,7 @@ icons:
           value: 'check'
         type: 'command'
         value: |-
-          [player]: say &a我&b%player_level%&a辣!
+          [player]: say &a我 &b%player_level% &a辣!
       - condition:
           type: 'perm'
           value: 'em.test.buy'
@@ -140,9 +137,9 @@ icons:
       - condition:
           # 检测papi变量
           type: 'papi'
-          # 如果对比的是文字 请使用 " 将文字括起来
+          # 请使用 " 将文字括起来
           # 例如: "%player_name%" == 腐竹
-          value: '%player_level% >= 5'
+          value: '"%player_level%" >= 5'
         type: 'command'
         value: |-
           [player]: say 成了
