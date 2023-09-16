@@ -17,6 +17,7 @@ import pers.soulflame.easymenu.managers.conditions.*;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
 import pers.soulflame.easymenu.managers.functions.CommandFunction;
 import pers.soulflame.easymenu.managers.functions.JSFunction;
+import pers.soulflame.easymenu.managers.functions.SoundFunction;
 import pers.soulflame.easymenu.managers.sources.BaseSource;
 import pers.soulflame.easymenu.managers.sources.NISource;
 import pers.soulflame.easymenu.utils.FileUtil;
@@ -335,6 +336,7 @@ public final class EasyLoad {
         addFunction(new CatchFunction(section.getString("catch", "catch")));
         addFunction(new CommandFunction(section.getString("command", "command")));
         addFunction(new JSFunction(section.getString("java-script", "js")));
+        addFunction(new SoundFunction(section.getString("sound", "sound")));
         getPluginSec().getStringList("functions.finish").stream()
                 .map(string -> string.replace("<amount>",
                         String.valueOf(FunctionAPI.getFunctions().size())))

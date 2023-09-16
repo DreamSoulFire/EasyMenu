@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pers.soulflame.easymenu.EasyLoad;
+import pers.soulflame.easymenu.api.ConditionAPI;
 import pers.soulflame.easymenu.api.FunctionAPI;
 import pers.soulflame.easymenu.api.SourceAPI;
 import pers.soulflame.easymenu.commands.BaseCommand;
@@ -16,11 +17,15 @@ public class InfoCommand extends BaseCommand {
     public void onConsoleCommand(CommandSender sender, String[] args) {
         final var sources = SourceAPI.getSources();
         final var functions = FunctionAPI.getFunctions();
+        final var conditions = ConditionAPI.getConditions();
         EasyLoad.getCommandSec().getStringList("info").stream()
                 .map(string -> string.replace("<source>", String.valueOf(sources.size()))
                         .replace("<sources>", sources.keySet().toString())
                         .replace("<function>", String.valueOf(functions.size()))
-                        .replace("<functions>", functions.keySet().toString()))
+                        .replace("<functions>", functions.keySet().toString())
+                        .replace("<condition>", String.valueOf(conditions.size()))
+                        .replace("<conditions>", conditions.keySet().toString())
+                )
                 .forEach(TextUtil::sendMessage);
     }
 

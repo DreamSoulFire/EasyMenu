@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>菜单相关api</p>
@@ -71,18 +70,20 @@ public final class MenuAPI {
     public static Map<Integer, Result> parseInv(String layouts, Map<String, Object> icons, UUID uuid) {
         final Map<Integer, Result> map = new HashMap<>();
         if (layouts.length() % 9 != 0) throw new NullPointerException("Inventory's size must not higher than 6 lines");
-        final var i = new AtomicInteger();
-        for (char c : layouts.toCharArray()) {
+        var i = 0;
+        for (int j = 0; j < layouts.toCharArray().length; i++, j++) {
+            char c = layouts.charAt(j);
             final var key = String.valueOf(c);
             final var iconMap = (Map<String, Object>) icons.get(key);
+            if (iconMap == null) continue;
             final var source = (String) iconMap.get("source");
             final var item = (Map<String, Object>) iconMap.get("item");
             final var functions = (List<Map<String, ?>>) iconMap.get("functions");
             final var menuIcon = new MenuIcon(source, item, functions);
             final var parseItem = menuIcon.parseItem(uuid, source);
-            map.put(i.getAndIncrement(), new Result(key, parseItem, menuIcon));
+            map.put(i, new Result(key, parseItem, menuIcon));
         }
-        if (i.get() > 54) throw new NullPointerException("Inventory's size must not higher than 54, but you set '" + i.get() + "'");
+        if (i > 54) throw new NullPointerException("Inventory's size must not higher than 54, but you set '" + i + "'");
         return map;
     }
 

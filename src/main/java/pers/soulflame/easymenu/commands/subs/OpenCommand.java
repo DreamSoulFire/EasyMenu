@@ -36,7 +36,7 @@ public class OpenCommand extends BaseCommand {
         }
         final var menu = EasyLoad.getMenus().get(args[1]);
         final var condition = menu.condition();
-        var isOpen = false;
+        var isOpen = true;
         if (condition != null) {
             final var type = condition.get("type").toString();
             final var itemCondition = ConditionAPI.getCondition(type);

@@ -13,6 +13,7 @@ functions:
   catch: 'catch'
   command: 'command'
   java-script: 'js'
+  sound: 'sound'
 
 # 修改物品源内部注册名
 sources:

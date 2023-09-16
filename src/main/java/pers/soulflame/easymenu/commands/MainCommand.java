@@ -70,7 +70,7 @@ public class MainCommand implements TabExecutor {
         if (manager.getLength() > args.length) {
             section.getStringList("args-not-enough").stream()
                     .map(string -> string.replace("<desc>", manager.getCommandDesc()))
-                    .forEach(TextUtil::sendMessage);
+                    .forEach(s -> TextUtil.sendMessage(sender, s));
             return false;
         }
         final var strings = Arrays.copyOfRange(args, 1, args.length);
