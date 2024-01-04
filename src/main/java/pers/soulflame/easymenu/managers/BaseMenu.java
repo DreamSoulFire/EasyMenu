@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * <p>菜单界面构造类</p>
  */
-public record Menu(String title, Integer size, Map<String, Object> condition, String layouts, Map<String, Object> icons) implements InventoryHolder {
+public record BaseMenu(String title, Integer size, Map<String, Object> condition, String layouts, Map<String, Object> icons) implements InventoryHolder {
 
     private static Inventory inventory;
 

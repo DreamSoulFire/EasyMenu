@@ -1,7 +1,7 @@
 package pers.soulflame.easymenu.api;
 
 import org.bukkit.inventory.ItemStack;
-import pers.soulflame.easymenu.managers.Menu;
+import pers.soulflame.easymenu.managers.BaseMenu;
 import pers.soulflame.easymenu.managers.MenuIcon;
 import pers.soulflame.easymenu.utils.TextUtil;
 import pers.soulflame.easymenu.utils.YamlUtil;
@@ -43,8 +43,8 @@ public final class MenuAPI {
      * @return 菜单实例
      */
     @SuppressWarnings("unchecked")
-    public static Menu loadMenu(String path) {
-        Menu menu = null;
+    public static BaseMenu loadMenu(String path) {
+        BaseMenu baseMenu = null;
         try (final var reader = new FileReader(path, StandardCharsets.UTF_8)) {
             final var menuMap = YamlUtil.loadAs(reader, Map.class);
             final var title = TextUtil.color(((String) menuMap.get("title")));
@@ -52,10 +52,10 @@ public final class MenuAPI {
             final var options = (Map<String, Object>) menuMap.get("condition");
             final var layouts = ((String) menuMap.get("layouts")).replace("\n", "");
             final var icons = (Map<String, Object>) menuMap.get("icons");
-            menu = new Menu(title, size, options, layouts, icons);
+            baseMenu = new BaseMenu(title, size, options, layouts, icons);
         } catch (IOException ignored) {
         }
-        return menu;
+        return baseMenu;
     }
 
     /**

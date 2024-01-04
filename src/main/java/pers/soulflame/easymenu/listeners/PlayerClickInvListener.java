@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import pers.soulflame.easymenu.EasyMenu;
 import pers.soulflame.easymenu.api.MenuAPI;
-import pers.soulflame.easymenu.managers.Menu;
+import pers.soulflame.easymenu.managers.BaseMenu;
 
 public class PlayerClickInvListener implements Listener {
 
@@ -16,7 +16,7 @@ public class PlayerClickInvListener implements Listener {
         final var inventory = event.getClickedInventory();
         if (inventory == null) return;
         final var holder = inventory.getHolder();
-        if (!(holder instanceof Menu)) return;
+        if (!(holder instanceof BaseMenu)) return;
         event.setCancelled(true);
     }
 
@@ -27,9 +27,9 @@ public class PlayerClickInvListener implements Listener {
         final var inventory = event.getClickedInventory();
         if (inventory == null) return;
         final var holder = inventory.getHolder();
-        if (!(holder instanceof final Menu menu)) return;
+        if (!(holder instanceof final BaseMenu baseMenu)) return;
         final var rawSlot = event.getRawSlot();
-        var resultMap = MenuAPI.parseInv(menu.layouts(), menu.icons(), player.getUniqueId());
+        var resultMap = MenuAPI.parseInv(baseMenu.layouts(), baseMenu.icons(), player.getUniqueId());
         final var icon = MenuAPI.getMenuIcon(resultMap, rawSlot);
         if (icon == null) return;
         final var click = event.getClick();

@@ -48,6 +48,7 @@ public final class ScriptUtil {
         final var compilable = (Compilable) getEngine();
         try {
             compiled = compilable.compile(script);
+            compiled.eval();
             compiledMap.put(script, compiled);
         } catch (ScriptException e) {
             throw new RuntimeException(e);

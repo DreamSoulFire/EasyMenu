@@ -9,10 +9,10 @@ import pers.soulflame.easymenu.api.ConditionAPI;
 import pers.soulflame.easymenu.api.FunctionAPI;
 import pers.soulflame.easymenu.api.MenuAPI;
 import pers.soulflame.easymenu.api.SourceAPI;
+import pers.soulflame.easymenu.managers.BaseMenu;
 import pers.soulflame.easymenu.managers.ItemCondition;
 import pers.soulflame.easymenu.managers.ItemFunction;
 import pers.soulflame.easymenu.managers.ItemSource;
-import pers.soulflame.easymenu.managers.Menu;
 import pers.soulflame.easymenu.managers.conditions.*;
 import pers.soulflame.easymenu.managers.functions.CatchFunction;
 import pers.soulflame.easymenu.managers.functions.CommandFunction;
@@ -225,14 +225,14 @@ public final class EasyLoad {
         }
     }
 
-    private static final Map<String, Menu> menus = new HashMap<>();
+    private static final Map<String, BaseMenu> menus = new HashMap<>();
 
     /**
      * <p>获取所有菜单对象</p>
      *
      * @return 菜单对象的map
      */
-    public static Map<String, Menu> getMenus() {
+    public static Map<String, BaseMenu> getMenus() {
         return menus;
     }
 
